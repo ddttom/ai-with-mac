@@ -16,19 +16,83 @@ The focus is on two main frameworks:
 
 ```terminal
 ai-with-mac/
-├── part1/           # Introduction to AI on Mac
-├── part2/           # Getting Started with Python and Git
-├── part3/           # Running LLMs on Apple Silicon
-├── part4/           # Comparing MLX and PyTorch
-├── part5/           # Choosing the Right Method
-│   ├── combined_app/  # Web app combining MLX and PyTorch
-│   ├── images/        # Diagrams and screenshots
-│   └── ...            # Example scripts
-├── part6/           # Glossary of terms
-├── models/          # Directory for storing ML models
-├── data/            # Example datasets and data files
-├── notebooks/       # Jupyter notebooks
-└── scripts/         # Utility scripts
+├── .gitattributes
+├── .gitignore
+├── README.md
+├── data/                # Example datasets and data files
+├── docs/
+│   └── the essential gitignore file for apple AI projects.md
+├── master-setup-README.md
+├── master-setup.sh
+├── models/              # Directory for storing ML models
+├── notebooks/
+│   └── 01_Environment_Test.ipynb
+├── part1/               # Introduction to AI on Mac
+│   └── examples/
+│       └── hardware_check.py
+├── part2/               # Getting Started with Python and Git
+│   ├── examples/
+│   │   ├── docstring_example.py
+│   │   ├── requirements_example.py
+│   │   ├── test_setup.py
+│   │   └── virtual_env_demo.py
+│   ├── notebooks/
+│   │   └── 01_Environment_Test.ipynb
+│   └── scripts/
+│       ├── alternative_python_install.sh
+│       ├── alternative_venv.sh
+│       ├── create_project_structure.sh
+│       ├── fix_permissions.sh
+│       ├── install_homebrew.sh
+│       ├── install_python.sh
+│       ├── memory_issues.sh
+│       ├── setup_git.sh
+│       └── setup_venv.sh
+├── part3/               # Running LLMs on Apple Silicon
+│   ├── scripts/
+│   │   ├── download_gemma.sh
+│   │   ├── download_mistral.sh
+│   │   ├── download_phi.sh
+│   │   ├── huggingface_login.sh
+│   │   ├── install_mlx.sh
+│   │   ├── quantize_models.sh
+│   │   └── test_model.sh
+│   ├── advanced_chat.py
+│   ├── batch_process.py
+│   ├── document_qa.py
+│   └── simple_chat.py
+├── part4/               # Comparing MLX and PyTorch
+│   ├── convert_model.py
+│   ├── mlx_example.py
+│   └── pytorch_example.py
+├── part5/               # Choosing the Right Method
+│   ├── combined_app/    # Web app combining MLX and PyTorch
+│   │   ├── data/
+│   │   ├── models/
+│   │   ├── scripts/
+│   │   │   ├── caption.py
+│   │   │   ├── server.py
+│   │   │   └── summarize.py
+│   │   ├── static/
+│   │   │   └── css/
+│   │   │       └── style.css
+│   │   └── templates/
+│   │       ├── index.html
+│   │       └── result.html
+│   ├── images/          # Diagrams and screenshots
+│   ├── scripts/
+│   │   ├── lfs_track_model.sh
+│   │   └── setup_git_lfs.sh
+│   ├── document_qa_mlx.py
+│   ├── image_classifier_torch.py
+│   ├── ml_versioning.py
+│   ├── model_registry.py
+│   ├── setup_git_lfs.sh
+│   └── timeseries_mlx.py
+├── part6/               # Glossary of terms
+├── requirements.txt
+└── scripts/
+    └── test_setup.py
 ```
 
 ## Getting Started

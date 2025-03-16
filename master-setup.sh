@@ -288,6 +288,90 @@ echo -ne "Saving requirements.txt... "
 pip freeze > requirements.txt
 echo -e "${GREEN}Done!${NC}"
 
+echo -e "\n${CYAN}${BOLD}Setting Up Jupyter Extensions${NC}"
+echo -e "${CYAN}===========================${NC}"
+
+echo -e "Setting up Jupyter extensions for code completion and enhanced functionality..."
+
+# Create script for Jupyter extensions
+echo -ne "Creating Jupyter extensions setup script... "
+cat > "$PROJECT_DIR/scripts/setup_jupyter_extensions.sh" << 'EOF'
+#!/bin/bash
+# Script to install modern Jupyter extensions that work with Notebook 7+
+
+echo "Installing modern Jupyter extensions..."
+
+# Remove potentially incompatible old extensions
+pip uninstall -y jupyter_contrib_nbextensions jupyter_contrib_core jupyter_nbextensions_configurator 2>/dev/null
+
+# Install JupyterLab extensions
+pip install jupyterlab-lsp python-lsp-server
+pip install jupyterlab-git
+pip install jupyterlab-code-formatter black isort
+pip install ipywidgets
+
+# Install language servers
+pip install jedi-language-server
+
+# Build extensions
+jupyter lab build
+
+# Create Jupyter config directory if it doesn't exist
+jupyter_config_dir=$(jupyter --config-dir)
+mkdir -p "$jupyter_config_dir/serverconfig"
+
+# Create config to suppress "skipped server" messages
+cat > "$jupyter_config_dir/serverconfig/jupyter_server_config.py" << PYCONFIG
+c = get_config()
+
+# Suppress server extension messages
+c.ServerApp.log_level = 'WARN'
+c.LanguageServerManager.autodetect = False
+
+# Only load language servers we actually installed
+c.LanguageServerManager.language_servers = {
+    "python-lsp-server": {
+        "servercommand": ["pylsp"],
+        "languages": ["python"],
+        "version": 2
+    },
+    "jedi-language-server": {
+        "servercommand": ["jedi-language-server"],
+        "languages": ["python"],
+        "version": 2
+    }
+}
+PYCONFIG
+
+echo "Created Jupyter config to suppress 'skipped server' messages"
+echo "Modern Jupyter extensions installed!"
+echo "Restart your Jupyter server to activate them."
+EOF
+
+chmod +x "$PROJECT_DIR/scripts/setup_jupyter_extensions.sh"
+echo -e "${GREEN}Done!${NC}"
+
+# Ask if user wants to install Jupyter extensions now
+read -p "Would you like to install Jupyter extensions now? This adds code completion and other IDE features. (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo -e "${GREEN}Installing Jupyter extensions...${NC}"
+    bash "$PROJECT_DIR/scripts/setup_jupyter_extensions.sh"
+else
+    echo -e "${YELLOW}Skipping Jupyter extensions installation.${NC}"
+    echo -e "${YELLOW}You can install them later by running:${NC}"
+    echo -e "${BLUE}$PROJECT_DIR/scripts/setup_jupyter_extensions.sh${NC}"
+fi
+
+# Explain what was installed
+echo -e "\n${CYAN}About Jupyter Extensions:${NC}"
+echo -e "These extensions enhance your Jupyter notebook experience with:"
+echo -e "- Code completion and syntax checking (LSP)"
+echo -e "- Version control integration (Git)"
+echo -e "- Code formatting (Black and isort for Python)"
+echo -e "- Interactive widgets"
+echo -e "These tools make coding in notebooks more productive and IDE-like."
+
 echo -e "\n${CYAN}${BOLD}Copying Examples from Repository${NC}"
 echo -e "${CYAN}==============================${NC}"
 
