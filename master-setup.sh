@@ -538,25 +538,68 @@ source "$PROJECT_DIR/ai-env/bin/activate"
 # Set project directory
 export AI_PROJECT_DIR="$PROJECT_DIR"
 
+# Note: We no longer change directory here - it's handled in the shell function
+
 # Print welcome message
-echo -e "\033[0;32mAI environment activated! You're ready to go.\033[0m"
+echo -e "\033[0;32mAI environment activated! You're now in your AI project directory.\033[0m"
 echo -e "\033[0;34mProject directory: $PROJECT_DIR\033[0m"
 
 # List available models
 if [ -d "$PROJECT_DIR/models" ]; then
-    echo -e "\033[0;36mAvailable models:\033[0m"
-    find "$PROJECT_DIR/models" -maxdepth 1 -type d | grep -v "^$PROJECT_DIR/models\$" | sed 's|.*/||' | sort | sed 's/^/- /'
+    MODEL_COUNT=\$(find "$PROJECT_DIR/models" -maxdepth 1 -type d | grep -v "^$PROJECT_DIR/models\$" | wc -l | tr -d ' ')
+    if [ "\$MODEL_COUNT" -gt 0 ]; then
+        echo -e "\033[0;36mAvailable models:\033[0m"
+        find "$PROJECT_DIR/models" -maxdepth 1 -type d | grep -v "^$PROJECT_DIR/models\$" | sed 's|.*/||' | sort | sed 's/^/- /'
+    else
+        echo -e "\033[0;33mNo models downloaded yet. You can download one with the commands below.\033[0m"
+    fi
 else
-    echo -e "\033[0;33mNo models downloaded yet.\033[0m"
+    echo -e "\033[0;33mNo models downloaded yet. You can download one with the commands below.\033[0m"
 fi
+
+# Check what examples are available
+NOTEBOOK_COUNT=\$(find "$PROJECT_DIR/notebooks" -name "*.ipynb" | wc -l | tr -d ' ')
+SCRIPT_COUNT=\$(find "$PROJECT_DIR/scripts" -name "*.py" | wc -l | tr -d ' ')
+
+echo ""
+echo -e "\033[0;35mAvailable resources:\033[0m"
+echo -e "- \033[0;36mNotebooks:\033[0m \$NOTEBOOK_COUNT Jupyter notebooks in the 'notebooks' directory"
+echo -e "- \033[0;36mScripts:\033[0m \$SCRIPT_COUNT Python scripts in the 'scripts' directory"
 
 echo ""
 echo -e "\033[0;35mQuick commands:\033[0m"
-echo "- Download a model:  python scripts/download_models.py --model MODEL_NAME"
+echo "- Download a model:  python scripts/download_models.py --model gemma-2b-it-4bit"
 echo "- Start chatting:    python scripts/simple_chat.py --model models/MODEL_NAME"
 echo "- Launch Jupyter:    jupyter notebook"
 echo ""
+
+# Show first-time help message if no models are downloaded yet
+if [ ! -d "$PROJECT_DIR/models" ] || [ "\$(find "$PROJECT_DIR/models" -maxdepth 1 -type d | grep -v "^$PROJECT_DIR/models\$" | wc -l | tr -d ' ')" -eq 0 ]; then
+    echo -e "\033[1;33mFirst time setup tips:\033[0m"
+    echo -e "1. Download your first model with:"
+    echo -e "   \033[0;36mpython scripts/download_models.py --model gemma-2b-it-4bit\033[0m"
+    echo -e "2. Once downloaded, start chatting with:"
+    echo -e "   \033[0;36mpython scripts/simple_chat.py --model models/gemma-2b-it-4bit\033[0m"
+    echo -e "3. For more examples, explore the 'notebooks' directory with Jupyter:"
+    echo -e "   \033[0;36mjupyter notebook\033[0m"
+    echo ""
+fi
+
+echo -e "\033[1;33mTo exit this environment when finished:\033[0m"
+echo -e "   \033[0;36mtype 'deactivate'\033[0m (or close this terminal window)"
+echo ""
+
 echo -e "\033[0;32mHappy coding!\033[0m"
+
+# Create a local deactivate function to make exiting more reliable
+deactivate_ai() {
+    deactivate 2>/dev/null || true
+    echo "AI environment deactivated"
+}
+
+# Export the function so it's available
+export -f deactivate_ai
+alias deactivate='deactivate_ai'
 EOF
 
 # Make the activation script executable
@@ -587,46 +630,149 @@ else
     SHELL_CONFIG=""
 fi
 
-if [ -n "$SHELL_CONFIG" ]; then
-    echo -ne "Adding 'go-ai' command to $SHELL_CONFIG... "
-    
-    if [ "$SHELL_NAME" = "fish" ]; then
-        # Fish shell has different syntax
-        echo "function go-ai; source $PROJECT_DIR/go-ai.sh; end" >> "$SHELL_CONFIG"
+echo -e "\n${CYAN}${BOLD}Creating Standalone Launcher Script${NC}"
+echo -e "${CYAN}================================${NC}"
+
+# Create bin directory in home if it doesn't exist
+ensure_dir "$HOME/bin"
+
+# Check if go-ai already exists
+if [ -f "$HOME/bin/go-ai" ]; then
+    echo -e "${YELLOW}A 'go-ai' script already exists at $HOME/bin/go-ai${NC}"
+    read -p "Do you want to replace it? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}Skipping launcher script creation.${NC}"
+        echo -e "${YELLOW}Note: You can still run 'source $PROJECT_DIR/ai-env/bin/activate' to activate the environment.${NC}"
+        echo -e "${YELLOW}Then 'cd $PROJECT_DIR' to change to the project directory.${NC}"
     else
-        # Bash/Zsh
-        echo "alias go-ai='source $PROJECT_DIR/go-ai.sh'" >> "$SHELL_CONFIG"
+        echo -e "${GREEN}Replacing existing launcher script...${NC}"
+        # Continue with script creation
     fi
-    
-    echo -e "${GREEN}Done!${NC}"
-    echo -e "${YELLOW}Note: You'll need to restart your terminal or run 'source $SHELL_CONFIG' to use the command.${NC}"
 else
-    echo -e "${YELLOW}To activate the environment manually, run:${NC}"
-    echo -e "${CYAN}source $PROJECT_DIR/go-ai.sh${NC}"
+    # Continue with script creation
+    echo -ne "Creating standalone go-ai launcher script... "
+fi
+
+# Only create the script if it doesn't exist or user confirmed replacement
+if [ ! -f "$HOME/bin/go-ai" ] || [[ $REPLY =~ ^[Yy]$ ]]; then
+    cat > "$HOME/bin/go-ai" << EOF
+#!/bin/bash
+
+# Path to your AI project
+PROJECT_DIR="$PROJECT_DIR"
+
+# Change to the project directory
+cd "\$PROJECT_DIR" || { echo "Error: Could not change to \$PROJECT_DIR"; exit 1; }
+
+# Activate the virtual environment
+source "\$PROJECT_DIR/ai-env/bin/activate"
+
+# Print welcome message
+echo -e "\033[0;32mAI environment activated! You're now in your AI project directory.\033[0m"
+echo -e "\033[0;34mProject directory: \$PROJECT_DIR\033[0m"
+
+# Display the helpful information
+if [ -d "\$PROJECT_DIR/models" ]; then
+    MODEL_COUNT=\$(find "\$PROJECT_DIR/models" -maxdepth 1 -type d | grep -v "^\$PROJECT_DIR/models\\\$" | wc -l | tr -d ' ')
+    if [ "\$MODEL_COUNT" -gt 0 ]; then
+        echo -e "\033[0;36mAvailable models:\033[0m"
+        find "\$PROJECT_DIR/models" -maxdepth 1 -type d | grep -v "^\$PROJECT_DIR/models\\\$" | sed 's|.*/||' | sort | sed 's/^/- /'
+    else
+        echo -e "\033[0;33mNo models downloaded yet. You can download one with the commands below.\033[0m"
+    fi
+else
+    echo -e "\033[0;33mNo models downloaded yet. You can download one with the commands below.\033[0m"
+fi
+
+# Check what examples are available
+NOTEBOOK_COUNT=\$(find "\$PROJECT_DIR/notebooks" -name "*.ipynb" | wc -l | tr -d ' ')
+SCRIPT_COUNT=\$(find "\$PROJECT_DIR/scripts" -name "*.py" | wc -l | tr -d ' ')
+
+echo ""
+echo -e "\033[0;35mAvailable resources:\033[0m"
+echo -e "- \033[0;36mNotebooks:\033[0m \$NOTEBOOK_COUNT Jupyter notebooks in the 'notebooks' directory"
+echo -e "- \033[0;36mScripts:\033[0m \$SCRIPT_COUNT Python scripts in the 'scripts' directory"
+
+echo ""
+echo -e "\033[0;35mQuick commands:\033[0m"
+echo "- Download a model:  python scripts/download_models.py --model gemma-2b-it-4bit"
+echo "- Start chatting:    python scripts/simple_chat.py --model models/MODEL_NAME"
+echo "- Launch Jupyter:    jupyter notebook"
+echo ""
+
+# Show first-time help message if no models are downloaded yet
+if [ ! -d "\$PROJECT_DIR/models" ] || [ "\$(find "\$PROJECT_DIR/models" -maxdepth 1 -type d | grep -v "^\$PROJECT_DIR/models\\\$" | wc -l | tr -d ' ')" -eq 0 ]; then
+    echo -e "\033[1;33mFirst time setup tips:\033[0m"
+    echo -e "1. Download your first model with:"
+    echo -e "   \033[0;36mpython scripts/download_models.py --model gemma-2b-it-4bit\033[0m"
+    echo -e "2. Once downloaded, start chatting with:"
+    echo -e "   \033[0;36mpython scripts/simple_chat.py --model models/gemma-2b-it-4bit\033[0m"
+    echo -e "3. For more examples, explore the 'notebooks' directory with Jupyter:"
+    echo -e "   \033[0;36mjupyter notebook\033[0m"
+    echo ""
+fi
+
+echo -e "\033[1;33mTo exit this environment:\033[0m"
+echo -e "   \033[0;36mtype 'exit' or press Ctrl+D\033[0m"
+echo ""
+
+echo -e "\033[0;32mHappy coding!\033[0m"
+
+# Start a new shell with the virtual environment active
+\$SHELL
+EOF
+
+    # Make the script executable
+    chmod +x "$HOME/bin/go-ai" || { 
+        echo -e "${RED}Error: Could not make script executable. Trying with sudo...${NC}"
+        sudo chmod +x "$HOME/bin/go-ai" || {
+            echo -e "${RED}Error: Could not make script executable even with sudo.${NC}"
+            echo -e "${YELLOW}Please manually make it executable with: chmod +x $HOME/bin/go-ai${NC}"
+        }
+    }
+    echo -e "${GREEN}Done!${NC}"
+fi
+
+# Update PATH if needed
+echo -ne "Checking if ~/bin is in your PATH... "
+if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+    # Add ~/bin to PATH in shell config
+    if [ "$SHELL_NAME" = "bash" ]; then
+        echo 'export PATH="$HOME/bin:$PATH"' >> "$SHELL_CONFIG"
+    elif [ "$SHELL_NAME" = "zsh" ]; then
+        echo 'export PATH="$HOME/bin:$PATH"' >> "$SHELL_CONFIG"
+    elif [ "$SHELL_NAME" = "fish" ]; then
+        echo 'set -gx PATH $HOME/bin $PATH' >> "$SHELL_CONFIG"
+    fi
+    echo -e "${YELLOW}Added ~/bin to your PATH in $SHELL_CONFIG${NC}"
+else
+    echo -e "${GREEN}Already in PATH!${NC}"
 fi
 
 echo -e "\n${GREEN}${BOLD}Setup Complete!${NC}"
 echo -e "${GREEN}==================${NC}"
 echo -e "${CYAN}Your fresh AI environment has been created at: ${BOLD}$PROJECT_DIR${NC}"
+
 echo -e "\n${MAGENTA}What happened:${NC}"
 echo -e "1. ${CYAN}Created a fresh project directory separate from the source repository${NC}"
 echo -e "2. ${CYAN}Set up a Python virtual environment with all required dependencies${NC}"
 echo -e "3. ${CYAN}Copied examples, scripts, and notebooks from the source repository${NC}"
-echo -e "4. ${CYAN}Created helper scripts for downloading and using AI models${NC}"
-echo -e "5. ${CYAN}Set up the 'go-ai' shell command for easy environment activation${NC}"
+echo -e "4. ${CYAN}Created a model downloader script optimized for your ${BOLD}$RAM_GB GB${NC}${CYAN} of RAM${NC}"
+echo -e "   ${CYAN}Based on your RAM, you can efficiently run models up to ${BOLD}$MAX_MODEL_SIZE${NC}${CYAN} parameters${NC}"
+echo -e "5. ${CYAN}Created a standalone 'go-ai' launcher in ~/bin${NC}"
 
 echo -e "\n${YELLOW}Next steps:${NC}"
 echo -e "1. ${CYAN}Source your shell config or restart your terminal${NC}"
 echo -e "   ${BLUE}source $SHELL_CONFIG${NC}"
-echo -e "2. ${CYAN}Activate your environment${NC}"
+echo -e "2. ${CYAN}Launch your AI environment from anywhere${NC}"
 echo -e "   ${BLUE}go-ai${NC}"
-echo -e "3. ${CYAN}Download a model${NC}"
-echo -e "   ${BLUE}python scripts/download_models.py --model gemma-2b-it-4bit${NC}"
+echo -e "3. ${CYAN}Download a model appropriate for your system (${BOLD}$RAM_GB GB RAM${NC}${CYAN})${NC}"
+echo -e "   ${BLUE}python scripts/download_models.py --model ${RECOMMENDED_MODELS[0]}${NC}"
 echo -e "4. ${CYAN}Start chatting with your model${NC}"
-echo -e "   ${BLUE}python scripts/simple_chat.py --model models/gemma-2b-it-4bit${NC}"
-echo -e "5. ${CYAN}Explore the copied examples and notebooks${NC}"
-echo -e "   ${BLUE}ls scripts/    # View available scripts${NC}"
-echo -e "   ${BLUE}jupyter notebook    # Explore notebooks${NC}"
+echo -e "   ${BLUE}python scripts/simple_chat.py --model models/${RECOMMENDED_MODELS[0]}${NC}"
+echo -e "5. ${CYAN}When you're done, exit the environment${NC}"
+echo -e "   ${BLUE}exit${NC}${CYAN} or press ${BLUE}Ctrl+D${NC}"
 
 echo -e "\n${CYAN}Source repository with additional examples: ${BOLD}$REPO_DIR${NC}"
 echo -e "${CYAN}You can copy more specific examples from there if needed.${NC}"
