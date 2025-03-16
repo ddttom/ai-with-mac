@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI with Mac - Result</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>AI with Mac Demonstration</h1>
+        <p>Example project combining MLX and PyTorch</p>
+    </header>
+    
+    <main>
+        <div class="result-container">
+            <h2>{{ result_type|title }} Result (using {{ framework }})</h2>
+            
+            {% if result_type == "summary" %}
+                <div class="result-box">
+                    <h3>Original Text:</h3>
+                    <div class="original-text">{{ original }}</div>
+                    
+                    <h3>Summary:</h3>
+                    <div class="result-text">{{ result }}</div>
+                </div>
+            {% elif result_type == "caption" %}
+                <div class="result-box">
+                    <div class="image-container">
+                        <img src="{{ image_path }}" alt="Uploaded image">
+                    </div>
+                    
+                    <h3>Generated Caption:</h3>
+                    <div class="result-text">{{ result }}</div>
+                </div>
+            {% endif %}
+            
+            <div class="back-link">
+                <a href="/">Back to Home</a>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Part of the "AI with Mac" series</p>
+    </footer>
+</body>
+</html>

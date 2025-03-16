@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI with Mac Demonstration</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>AI with Mac Demonstration</h1>
+        <p>Example project combining MLX and PyTorch</p>
+    </header>
+    
+    <main>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        <div class="cards">
+            <div class="card">
+                <h2>Text Summarization</h2>
+                <p>Using MLX for efficient inference</p>
+                
+                <form action="/summarize" method="post">
+                    <textarea name="text" rows="10" placeholder="Enter text to summarize..."></textarea>
+                    <button type="submit">Summarize</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2>Image Captioning</h2>
+                <p>Using PyTorch with Metal acceleration</p>
+                
+                <form action="/caption" method="post" enctype="multipart/form-data">
+                    <div class="file-upload">
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+                    <button type="submit">Generate Caption</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Part of the "AI with Mac" series</p>
+    </footer>
+</body>
+</html>

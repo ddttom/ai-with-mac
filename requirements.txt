@@ -1,0 +1,23 @@
+# Core dependencies
+numpy==1.24.3
+matplotlib==3.7.2
+torch==2.3.0
+torchvision==0.18.0
+flask==2.3.2
+pillow==10.0.0
+pypdf==3.15.1
+
+# Apple Silicon specific
+mlx==1.2.0
+mlx-lm==0.3.0
+
+# Time series example
+pandas==2.0.3
+scikit-learn==1.3.0
+
+# Additional utilities
+tqdm==4.65.0
+requests==2.31.0
+jupyter==1.0.0
+huggingface_hub==0.19.4
+psutil==5.9.5
