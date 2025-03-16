@@ -54,6 +54,21 @@ if [[ "$(uname -m)" != "arm64" ]]; then
     fi
 fi
 
+# Get all user inputs at the beginning
+
+# Set up a new project directory
+DEFAULT_PROJECT_DIR="$HOME/play-with-AI"
+read -p "Enter new project directory [$DEFAULT_PROJECT_DIR]: " PROJECT_DIR
+PROJECT_DIR=${PROJECT_DIR:-$DEFAULT_PROJECT_DIR}
+
+# Check if go-ai already exists in ~/bin
+GO_AI_REPLACE="n"
+if [ -f "$HOME/bin/go-ai" ]; then
+    echo -e "${YELLOW}A 'go-ai' script already exists at $HOME/bin/go-ai${NC}"
+    read -p "Do you want to replace it? (y/n) " -n 1 -r GO_AI_REPLACE
+    echo
+fi
+
 # Function to check available RAM
 check_ram() {
     # Get physical memory in bytes and convert to GB
@@ -636,26 +651,9 @@ echo -e "${CYAN}================================${NC}"
 # Create bin directory in home if it doesn't exist
 ensure_dir "$HOME/bin"
 
-# Check if go-ai already exists
-if [ -f "$HOME/bin/go-ai" ]; then
-    echo -e "${YELLOW}A 'go-ai' script already exists at $HOME/bin/go-ai${NC}"
-    read -p "Do you want to replace it? (y/n) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${YELLOW}Skipping launcher script creation.${NC}"
-        echo -e "${YELLOW}Note: You can still run 'source $PROJECT_DIR/ai-env/bin/activate' to activate the environment.${NC}"
-        echo -e "${YELLOW}Then 'cd $PROJECT_DIR' to change to the project directory.${NC}"
-    else
-        echo -e "${GREEN}Replacing existing launcher script...${NC}"
-        # Continue with script creation
-    fi
-else
-    # Continue with script creation
+# Create standalone go-ai executable script
+if [[ "$GO_AI_REPLACE" =~ ^[Yy]$ ]] || [ ! -f "$HOME/bin/go-ai" ]; then
     echo -ne "Creating standalone go-ai launcher script... "
-fi
-
-# Only create the script if it doesn't exist or user confirmed replacement
-if [ ! -f "$HOME/bin/go-ai" ] || [[ $REPLY =~ ^[Yy]$ ]]; then
     cat > "$HOME/bin/go-ai" << EOF
 #!/bin/bash
 
@@ -732,6 +730,10 @@ EOF
         }
     }
     echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}Skipping launcher script creation.${NC}"
+    echo -e "${YELLOW}Note: You can still run 'source $PROJECT_DIR/ai-env/bin/activate' to activate the environment.${NC}"
+    echo -e "${YELLOW}Then 'cd $PROJECT_DIR' to change to the project directory.${NC}"
 fi
 
 # Update PATH if needed
