@@ -2,7 +2,6 @@
 
 Over the past year, the landscape of artificial intelligence has dramatically shifted. What once required expensive cloud credits or specialized hardware can now run efficiently on your MacBook, thanks to the incredible capabilities of Apple Silicon. In this guide, I'll walk you through creating a complete AI development environment on your Mac that allows you to run sophisticated machine learning models locally, preserving your privacy and avoiding subscription costs.
 
-
 Why Run AI Locally on Your Mac?
 Before diving into the technical setup, let's consider why local AI development on Mac has become so compelling:
 
@@ -48,27 +47,15 @@ All of this happens with minimal interaction after the initial prompts, allowing
 Hardware-Aware Model Recommendations
 One of the most valuable aspects of the script is how it detects your Mac's RAM and provides appropriate model recommendations. Here's a breakdown of what it suggests:
 
-RAM
-Recommended Models
-Maximum Size
-<8GB
-Gemma-2B, Phi-3-mini (4-bit)
-2B parameters
-8-16GB
-Mistral-7B, Gemma-7B (4-bit)
-7B parameters
-16-32GB
-Llama-3-8B, Gemma-7B (4-bit)
-7-13B parameters
-32-64GB
-Llama-3-8B (8-bit), multiple smaller models
-13B parameters
-64-128GB
-Multiple models at higher precision
-13-30B parameters
-128GB+
-Llama-3-70B (4-bit), multiple large models
-70B+ parameters
+| Table (striped,bordered,first-line) |                                             |                   |
+| :---------------------------------- | :------------------------------------------ | :---------------- |
+| **RAM**                             | **Recommended Models**                      | **Maximum Size**  |
+| \<8GB                               | Gemma-2B, Phi-3-mini (4-bit)                | 2B parameters     |
+| 8-16GB                              | Mistral-7B, Gemma-7B (4-bit)                | 7B parameters     |
+| 16-32GB                             | Llama-3-8B, Gemma-7B (4-bit)                | 7-13B parameters  |
+| 32-64GB                             | Llama-3-8B (8-bit), multiple smaller models | 13B parameters    |
+| 64-128GB                            | Multiple models at higher precision         | 13-30B parameters |
+| 128GB+                              | Llama-3-70B (4-bit), multiple large models  | 70B+ parameters   |
 
 This guidance helps you choose models that will run efficiently on your hardware, avoiding out-of-memory errors and performance bottlenecks.
 The Standalone Launcher: go-ai
@@ -107,19 +94,19 @@ For those interested in the technical aspects, here's what's happening behind th
 Virtual Environment Setup
 The script creates a proper Python virtual environment with all necessary dependencies:
 
-# Create virtual environment
+## Create virtual environment
 
 python3 -m venv ai-env
 
-# Install core dependencies
+## Install core dependencies
 
 pip install numpy pandas matplotlib jupyter
 
-# Install framework-specific packages
+## Install framework-specific packages
 
 pip install mlx mlx-lm torch torchvision --extra-index-url <https://download.pytorch.org/whl/cpu>
 
-# Install practical utilities
+## Install practical utilities
 
 pip install flask pypdf huggingface_hub
 Framework Configuration
@@ -134,36 +121,27 @@ For a better notebook experience, the script creates a custom Jupyter configurat
 
 c = get_config()
 
-# Suppress server extension messages
+## Suppress server extension messages
 
 c.ServerApp.log_level = 'WARN'
 
 c.LanguageServerManager.autodetect = False
 
-# Only load language servers we actually installed
+## Only load language servers we actually installed
 
 c.LanguageServerManager.language_servers = {
 
     "python-lsp-server": {
-
         "servercommand": ["pylsp"],
-
         "languages": ["python"],
-
         "version": 2
-
     },
 
     "jedi-language-server": {
-
         "servercommand": ["jedi-language-server"],
-
         "languages": ["python"],
-
         "version": 2
-
     }
-
 }
 
 This configuration provides code completion while eliminating those annoying "missing server" messages.
