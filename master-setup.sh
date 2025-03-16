@@ -185,11 +185,6 @@ fi
 echo -e "\n${CYAN}${BOLD}Fresh Project Setup${NC}"
 echo -e "${CYAN}===================${NC}"
 
-# Set up a new project directory
-DEFAULT_PROJECT_DIR="$HOME/play-with-AI"
-read -p "Enter new project directory [$DEFAULT_PROJECT_DIR]: " PROJECT_DIR
-PROJECT_DIR=${PROJECT_DIR:-$DEFAULT_PROJECT_DIR}
-
 # Create project directory if it doesn't exist
 ensure_dir "$PROJECT_DIR"
 
