@@ -1,6 +1,5 @@
 # AI with Mac
 
-![AI with Mac Banner](https://via.placeholder.com/1200x300?text=AI+with+Mac)
 
 A comprehensive guide and code repository for running AI models locally on Apple Silicon Macs.
 
@@ -202,4 +201,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Happy coding with AI on your Mac! 🍎💻🧠
+Happy coding with AI on your Mac!
