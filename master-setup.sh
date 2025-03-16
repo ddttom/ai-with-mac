@@ -201,19 +201,35 @@ source go-ai.sh
 
 Or use the shortcut command \`go-ai\` if you've set it up.
 
+## What's Included
+
+This environment includes:
+
+- Ready-to-use examples from the original repository
+- Scripts for downloading and running AI models
+- A properly configured Python environment with all dependencies
+- Convenient activation command
+
 ## Project Structure
 
-- \`notebooks/\`: Jupyter notebooks for exploration
-- \`scripts/\`: Python scripts for running models
-- \`models/\`: Directory for AI models
-- \`data/\`: Data files for testing and demos
+- \`notebooks/\`: Jupyter notebooks for exploration (copied from source repository)
+- \`scripts/\`: Python scripts for running models (copied from source repository)
+- \`models/\`: Directory for AI models (will be populated when you download models)
+- \`data/\`: Data files for testing and demos (small examples copied from source repository)
 
 ## Reference Repository
 
 The original code examples can be found in the source repository.
-Feel free to copy over examples as needed.
+Additional examples can be copied over as needed.
 
 Source: $REPO_DIR
+
+## Getting Started
+
+1. Activate the environment: \`go-ai\`
+2. Download a model: \`python scripts/download_models.py --model gemma-2b-it-4bit\`
+3. Start chatting: \`python scripts/simple_chat.py --model models/gemma-2b-it-4bit\`
+4. Explore notebooks: \`jupyter notebook\`
 EOF
 
 echo -e "${GREEN}Done!${NC}"
@@ -255,10 +271,49 @@ echo -ne "Saving requirements.txt... "
 pip freeze > requirements.txt
 echo -e "${GREEN}Done!${NC}"
 
+echo -e "\n${CYAN}${BOLD}Copying Examples from Repository${NC}"
+echo -e "${CYAN}==============================${NC}"
+
+# Copy examples from repository
+echo -e "Copying useful examples from the repository to your new environment..."
+
+# Copy notebook examples
+echo -ne "Copying notebook examples... "
+if [ -d "$REPO_DIR/notebooks" ] && [ "$(ls -A "$REPO_DIR/notebooks" 2>/dev/null)" ]; then
+    cp -r "$REPO_DIR/notebooks"/* "$PROJECT_DIR/notebooks"/ 2>/dev/null
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}No notebooks found in repository.${NC}"
+fi
+
+# Copy script examples
+echo -ne "Copying script examples... "
+if [ -d "$REPO_DIR/scripts" ] && [ "$(ls -A "$REPO_DIR/scripts" 2>/dev/null)" ]; then
+    cp -r "$REPO_DIR/scripts"/* "$PROJECT_DIR/scripts"/ 2>/dev/null
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}No scripts found in repository.${NC}"
+fi
+
+# Copy data examples (if they aren't too large)
+echo -ne "Copying small data examples... "
+if [ -d "$REPO_DIR/data" ]; then
+    # Find and copy only small data files (< 5MB)
+    find "$REPO_DIR/data" -type f -size -5M -exec cp {} "$PROJECT_DIR/data/" \; 2>/dev/null
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}No data directory found in repository.${NC}"
+fi
+
+# Explain what was copied
+echo -e "${GREEN}Examples successfully copied to your new environment!${NC}"
+echo -e "${YELLOW}Note:${NC} Only smaller data files were copied. Larger files should be downloaded as needed."
+echo -e "You can always reference the original repository at ${BLUE}$REPO_DIR${NC} for more examples."
+
 echo -e "\n${CYAN}${BOLD}Creating Model Download Scripts${NC}"
 echo -e "${CYAN}=============================${NC}"
 
-# Create scripts directory for model download scripts
+# Create scripts directory for model download scripts (should already exist from copying)
 ensure_dir "$PROJECT_DIR/scripts"
 
 # Create main download_models.py script
@@ -553,6 +608,13 @@ fi
 echo -e "\n${GREEN}${BOLD}Setup Complete!${NC}"
 echo -e "${GREEN}==================${NC}"
 echo -e "${CYAN}Your fresh AI environment has been created at: ${BOLD}$PROJECT_DIR${NC}"
+echo -e "\n${MAGENTA}What happened:${NC}"
+echo -e "1. ${CYAN}Created a fresh project directory separate from the source repository${NC}"
+echo -e "2. ${CYAN}Set up a Python virtual environment with all required dependencies${NC}"
+echo -e "3. ${CYAN}Copied examples, scripts, and notebooks from the source repository${NC}"
+echo -e "4. ${CYAN}Created helper scripts for downloading and using AI models${NC}"
+echo -e "5. ${CYAN}Set up the 'go-ai' shell command for easy environment activation${NC}"
+
 echo -e "\n${YELLOW}Next steps:${NC}"
 echo -e "1. ${CYAN}Source your shell config or restart your terminal${NC}"
 echo -e "   ${BLUE}source $SHELL_CONFIG${NC}"
@@ -562,6 +624,10 @@ echo -e "3. ${CYAN}Download a model${NC}"
 echo -e "   ${BLUE}python scripts/download_models.py --model gemma-2b-it-4bit${NC}"
 echo -e "4. ${CYAN}Start chatting with your model${NC}"
 echo -e "   ${BLUE}python scripts/simple_chat.py --model models/gemma-2b-it-4bit${NC}"
-echo -e "\n${CYAN}Source repository with example code: ${BOLD}$REPO_DIR${NC}"
-echo -e "${CYAN}Feel free to copy specific examples as needed.${NC}"
+echo -e "5. ${CYAN}Explore the copied examples and notebooks${NC}"
+echo -e "   ${BLUE}ls scripts/    # View available scripts${NC}"
+echo -e "   ${BLUE}jupyter notebook    # Explore notebooks${NC}"
+
+echo -e "\n${CYAN}Source repository with additional examples: ${BOLD}$REPO_DIR${NC}"
+echo -e "${CYAN}You can copy more specific examples from there if needed.${NC}"
 echo -e "\n${GREEN}${BOLD}Happy AI coding on your Mac!${NC}"
