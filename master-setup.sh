@@ -54,22 +54,29 @@ if [[ "$(uname -m)" != "arm64" ]]; then
     fi
 fi
 
-# Get all user inputs at the beginning
-
-# Set up a new project directory
+# Get project directory input
 DEFAULT_PROJECT_DIR="$HOME/play-with-AI"
 read -p "Enter new project directory [$DEFAULT_PROJECT_DIR]: " PROJECT_DIR
 PROJECT_DIR=${PROJECT_DIR:-$DEFAULT_PROJECT_DIR}
 
-# Check if go-ai already exists in ~/bin
-GO_AI_REPLACE="n"
+# Check if go-ai already exists and if it points to the correct directory
+GO_AI_REPLACE="y"  # Default to yes if script doesn't exist
 if [ -f "$HOME/bin/go-ai" ]; then
-    echo -e "${YELLOW}A 'go-ai' script already exists at $HOME/bin/go-ai${NC}"
-    read -p "Do you want to replace it? (y/n) " -n 1 -r GO_AI_REPLACE
-    echo
+    CURRENT_PATH=$(grep "PROJECT_DIR=" "$HOME/bin/go-ai" | head -1 | cut -d'"' -f2)
+    if [ "$CURRENT_PATH" = "$PROJECT_DIR" ]; then
+        echo -e "${GREEN}Found existing go-ai script already pointing to $PROJECT_DIR${NC}"
+        echo -e "${YELLOW}Script will be updated with the latest features${NC}"
+    else
+        echo -e "${YELLOW}A 'go-ai' script already exists but points to a different directory:${NC}"
+        echo -e "${BLUE}Current: $CURRENT_PATH${NC}"
+        echo -e "${BLUE}New: $PROJECT_DIR${NC}"
+        read -p "Do you want to update it to point to the new directory? (y/n) " -n 1 -r
+        echo
+        GO_AI_REPLACE=$REPLY
+    fi
 fi
 
-# Function to check available RAM
+# Functions
 check_ram() {
     # Get physical memory in bytes and convert to GB
     local mem_bytes=$(sysctl -n hw.memsize)
@@ -651,8 +658,8 @@ echo -e "${CYAN}================================${NC}"
 # Create bin directory in home if it doesn't exist
 ensure_dir "$HOME/bin"
 
-# Create standalone go-ai executable script
-if [[ "$GO_AI_REPLACE" =~ ^[Yy]$ ]] || [ ! -f "$HOME/bin/go-ai" ]; then
+# Create standalone go-ai executable script based on user's earlier choice
+if [[ "$GO_AI_REPLACE" =~ ^[Yy]$ ]]; then
     echo -ne "Creating standalone go-ai launcher script... "
     cat > "$HOME/bin/go-ai" << EOF
 #!/bin/bash
