@@ -361,6 +361,18 @@ echo -e "${CYAN}========================${NC}"
 # Create bin directory if it doesn't exist
 ensure_dir "$HOME/bin"
 
+# Define the model checking code to be added to go-ai script
+MODEL_CHECK_CODE='
+# Check if models directory is empty and download a default model if needed
+MODEL_COUNT=$(ls -1 "$PROJECT_DIR/models" 2>/dev/null | wc -l | tr -d '"'"' '"'"')
+if [ "$MODEL_COUNT" -eq 0 ]; then
+    echo -e "${YELLOW}No models found in the models directory.${NC}"
+    echo -e "${CYAN}Installing gemma-2b-it-4bit model...${NC}"
+    python scripts/download_models.py --model gemma-2b-it-4bit
+else
+    echo -e "${GREEN}Found $MODEL_COUNT model(s) in the models directory.${NC}"
+fi'
+
 # Create go-ai script
 if [[ "$GO_AI_REPLACE" =~ ^[Yy]$ ]]; then
     echo -ne "Creating go-ai activation script... "
@@ -403,16 +415,7 @@ fi
 echo -e "\${CYAN}Activating AI environment...\${NC}"
 cd "\$PROJECT_DIR"
 source "\$VENV_DIR/bin/activate"
-
-# Check if models directory is empty and download a default model if needed
-MODEL_COUNT=\$(ls -1 "\$PROJECT_DIR/models" 2>/dev/null | wc -l | tr -d ' ')
-if [ "\$MODEL_COUNT" -eq 0 ]; then
-    echo -e "\${YELLOW}No models found in the models directory.\${NC}"
-    echo -e "\${CYAN}Installing gemma-2b-it-4bit model...\${NC}"
-    python scripts/download_models.py --model gemma-2b-it-4bit
-else
-    echo -e "\${GREEN}Found \$MODEL_COUNT model(s) in the models directory.\${NC}"
-fi
+$MODEL_CHECK_CODE
 
 # Print success message
 echo -e "\${GREEN}\${BOLD}AI environment activated!\${NC}"
@@ -429,32 +432,51 @@ echo -e "Enjoy your AI development session!"
 EOF
     chmod +x "$HOME/bin/go-ai"
     echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}Updating existing go-ai script with model checking...${NC}"
     
-    # Check if ~/bin is in PATH
-    if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
-        echo -e "${YELLOW}Adding ~/bin to your PATH...${NC}"
-        
-        # Determine shell configuration file
-        SHELL_CONFIG=""
-        if [[ "$SHELL" == *"zsh"* ]]; then
-            SHELL_CONFIG="$HOME/.zshrc"
-        elif [[ "$SHELL" == *"bash"* ]]; then
-            SHELL_CONFIG="$HOME/.bash_profile"
-            if [ ! -f "$SHELL_CONFIG" ]; then
-                SHELL_CONFIG="$HOME/.bashrc"
-            fi
-        fi
-        
-        if [ -n "$SHELL_CONFIG" ]; then
-            echo 'export PATH="$HOME/bin:$PATH"' >> "$SHELL_CONFIG"
-            echo -e "${GREEN}Added ~/bin to $SHELL_CONFIG${NC}"
-            echo -e "${YELLOW}Please restart your terminal or run 'source $SHELL_CONFIG' to apply changes.${NC}"
+    # Check if the existing go-ai script already has model checking code
+    if grep -q "Installing gemma-2b-it-4bit model" "$HOME/bin/go-ai"; then
+        echo -e "${GREEN}Model checking already exists in go-ai script.${NC}"
+    else
+        # Find the line after "source" command to insert our model checking code
+        SOURCE_LINE=$(grep -n "source.*activate" "$HOME/bin/go-ai" | tail -1 | cut -d: -f1)
+        if [ -n "$SOURCE_LINE" ]; then
+            # Create a temporary file with the model checking code inserted
+            awk -v line="$SOURCE_LINE" -v code="$MODEL_CHECK_CODE" 'NR==line+1{print code} {print}' "$HOME/bin/go-ai" > "$HOME/bin/go-ai.tmp"
+            mv "$HOME/bin/go-ai.tmp" "$HOME/bin/go-ai"
+            chmod +x "$HOME/bin/go-ai"
+            echo -e "${GREEN}Added model checking to existing go-ai script.${NC}"
         else
-            echo -e "${YELLOW}Could not determine shell configuration file. Please add ~/bin to your PATH manually.${NC}"
+            echo -e "${YELLOW}Could not find appropriate location to insert model checking in go-ai script.${NC}"
+            echo -e "${YELLOW}Please add the following code manually to your go-ai script after the environment activation:${NC}"
+            echo -e "${CYAN}$MODEL_CHECK_CODE${NC}"
         fi
     fi
-else
-    echo -e "${YELLOW}Skipping go-ai script creation as requested.${NC}"
+fi
+
+# Check if ~/bin is in PATH
+if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+    echo -e "${YELLOW}Adding ~/bin to your PATH...${NC}"
+    
+    # Determine shell configuration file
+    SHELL_CONFIG=""
+    if [[ "$SHELL" == *"zsh"* ]]; then
+        SHELL_CONFIG="$HOME/.zshrc"
+    elif [[ "$SHELL" == *"bash"* ]]; then
+        SHELL_CONFIG="$HOME/.bash_profile"
+        if [ ! -f "$SHELL_CONFIG" ]; then
+            SHELL_CONFIG="$HOME/.bashrc"
+        fi
+    fi
+    
+    if [ -n "$SHELL_CONFIG" ]; then
+        echo 'export PATH="$HOME/bin:$PATH"' >> "$SHELL_CONFIG"
+        echo -e "${GREEN}Added ~/bin to $SHELL_CONFIG${NC}"
+        echo -e "${YELLOW}Please restart your terminal or run 'source $SHELL_CONFIG' to apply changes.${NC}"
+    else
+        echo -e "${YELLOW}Could not determine shell configuration file. Please add ~/bin to your PATH manually.${NC}"
+    fi
 fi
 
 echo -e "\n${CYAN}Installing Jupyter extensions...${NC}"
