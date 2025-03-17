@@ -268,14 +268,14 @@ echo -e "${GREEN}Done!${NC}"
 # Install common dependencies
 echo -ne "Installing common dependencies... "
 pip install numpy pandas matplotlib jupyter
+echo -e "${GREEN}Done!${NC}"
 
 # Install framework-specific packages
-echo -e "${GREEN}Done!${NC}"
 echo -ne "Installing framework-specific packages... "
 pip install mlx mlx-lm huggingface_hub torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu
+echo -e "${GREEN}Done!${NC}"
 
 # Install practical utilities
-echo -e "${GREEN}Done!${NC}"
 echo -ne "Installing practical utilities... "
 pip install flask pypdf
 echo -e "${GREEN}Done!${NC}"
@@ -303,4 +303,138 @@ fi
 # Copy notebook examples
 echo -ne "Copying notebook examples... "
 if [ -d "$REPO_DIR/notebooks" ] && [ "$(ls -A "$REPO_DIR/notebooks" 2>/dev/null)" ]; then
-    cp -r "$REPO_DIR
+    cp -r "$REPO_DIR/notebooks/"* "$PROJECT_DIR/notebooks/" 2>/dev/null
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}No notebook examples found in repository.${NC}"
+fi
+
+# Copy script examples
+echo -ne "Copying script examples... "
+if [ -d "$REPO_DIR/scripts" ] && [ "$(ls -A "$REPO_DIR/scripts" 2>/dev/null)" ]; then
+    cp -r "$REPO_DIR/scripts/"* "$PROJECT_DIR/scripts/" 2>/dev/null
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}No script examples found in repository.${NC}"
+fi
+
+# Copy part3 examples if they exist
+echo -ne "Copying chat examples... "
+if [ -d "$REPO_DIR/part3" ] && [ "$(ls -A "$REPO_DIR/part3" 2>/dev/null)" ]; then
+    # Copy Python files from part3 to scripts
+    find "$REPO_DIR/part3" -maxdepth 1 -name "*.py" -exec cp {} "$PROJECT_DIR/scripts/" \; 2>/dev/null
+    # Copy scripts from part3/scripts to scripts
+    if [ -d "$REPO_DIR/part3/scripts" ]; then
+        cp -r "$REPO_DIR/part3/scripts/"* "$PROJECT_DIR/scripts/" 2>/dev/null
+    fi
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}No chat examples found in repository.${NC}"
+fi
+
+# Copy small data examples if they exist
+echo -ne "Copying data examples... "
+if [ -d "$REPO_DIR/data" ] && [ "$(ls -A "$REPO_DIR/data" 2>/dev/null)" ]; then
+    # Only copy small files (< 5MB)
+    find "$REPO_DIR/data" -type f -size -5M -exec cp --parents {} "$PROJECT_DIR/" \; 2>/dev/null
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}No data examples found in repository.${NC}"
+fi
+
+echo -e "\n${CYAN}${BOLD}Creating Activation Script${NC}"
+echo -e "${CYAN}========================${NC}"
+
+# Create bin directory if it doesn't exist
+ensure_dir "$HOME/bin"
+
+# Create go-ai script
+if [[ "$GO_AI_REPLACE" =~ ^[Yy]$ ]]; then
+    echo -ne "Creating go-ai activation script... "
+    cat > "$HOME/bin/go-ai" << EOF
+#!/bin/bash
+
+# AI with Mac - Environment Activation Script
+# This script activates the AI development environment
+
+# Configuration
+PROJECT_DIR="$PROJECT_DIR"
+VENV_DIR="\$PROJECT_DIR/ai-env"
+
+# ANSI color codes
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+
+# Check if virtual environment exists
+if [ ! -d "\$VENV_DIR" ]; then
+    echo -e "\${RED}Error: Virtual environment not found at \$VENV_DIR\${NC}"
+    echo "Please run the setup script first."
+    exit 1
+fi
+
+# Activate virtual environment
+echo -e "\${CYAN}Activating AI environment...\${NC}"
+cd "\$PROJECT_DIR"
+source "\$VENV_DIR/bin/activate"
+
+# Set PS1 to show we're in the AI environment
+export PS1="(ai-env) \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+
+# Print success message
+echo -e "\${GREEN}\${BOLD}AI environment activated!\${NC}"
+echo -e "\${CYAN}Working directory: \${BOLD}\$PROJECT_DIR\${NC}"
+echo -e "\${CYAN}Python: \${BOLD}\$(python --version)\${NC}"
+echo -e "\${CYAN}Available models: \${BOLD}\$(ls -1 \$PROJECT_DIR/models 2>/dev/null | wc -l)\${NC} models found in models/ directory"
+echo ""
+echo -e "\${BLUE}Quick commands:\${NC}"
+echo -e "  \${GREEN}python scripts/download_models.py --help\${NC} - Download AI models"
+echo -e "  \${GREEN}python scripts/simple_chat.py --help\${NC} - Start chatting with a model"
+echo -e "  \${GREEN}jupyter notebook\${NC} - Launch Jupyter Notebook"
+echo ""
+echo -e "Enjoy your AI development session!"
+EOF
+    chmod +x "$HOME/bin/go-ai"
+    echo -e "${GREEN}Done!${NC}"
+    
+    # Check if ~/bin is in PATH
+    if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+        echo -e "${YELLOW}Adding ~/bin to your PATH...${NC}"
+        
+        # Determine shell configuration file
+        SHELL_CONFIG=""
+        if [[ "$SHELL" == *"zsh"* ]]; then
+            SHELL_CONFIG="$HOME/.zshrc"
+        elif [[ "$SHELL" == *"bash"* ]]; then
+            SHELL_CONFIG="$HOME/.bash_profile"
+            if [ ! -f "$SHELL_CONFIG" ]; then
+                SHELL_CONFIG="$HOME/.bashrc"
+            fi
+        fi
+        
+        if [ -n "$SHELL_CONFIG" ]; then
+            echo 'export PATH="$HOME/bin:$PATH"' >> "$SHELL_CONFIG"
+            echo -e "${GREEN}Added ~/bin to $SHELL_CONFIG${NC}"
+            echo -e "${YELLOW}Please restart your terminal or run 'source $SHELL_CONFIG' to apply changes.${NC}"
+        else
+            echo -e "${YELLOW}Could not determine shell configuration file. Please add ~/bin to your PATH manually.${NC}"
+        fi
+    fi
+else
+    echo -e "${YELLOW}Skipping go-ai script creation as requested.${NC}"
+fi
+
+echo -e "\n${GREEN}${BOLD}Setup Complete!${NC}"
+echo -e "${GREEN}===================${NC}"
+echo -e "\n${CYAN}Your AI development environment is ready to use.${NC}"
+echo -e "${CYAN}To activate it, run: ${BOLD}go-ai${NC}"
+echo -e "${CYAN}(You may need to restart your terminal first)${NC}"
+echo -e "\n${CYAN}Recommended next steps:${NC}"
+echo -e "1. ${YELLOW}Activate the environment:${NC} go-ai"
+echo -e "2. ${YELLOW}Download a model:${NC} python scripts/download_models.py --model ${RECOMMENDED_MODELS[0]}"
+echo -e "3. ${YELLOW}Start chatting:${NC} python scripts/simple_chat.py --model models/${RECOMMENDED_MODELS[0]}"
+echo -e "4. ${YELLOW}Explore notebooks:${NC} jupyter notebook"
+echo -e "\n${CYAN}Happy AI development!${NC}"
