@@ -446,7 +446,10 @@ else
     echo -e "${YELLOW}Skipping go-ai script creation as requested.${NC}"
 fi
 
+echo -e "\n${CYAN}Installing Jupyter extensions...${NC}"
 bash scripts/jupyter_extensions.sh
+echo -e "\n${CYAN}Installing gemma-2b-it-4bit model...${NC}"
+python scripts/download_models.py --model gemma-2b-it-4bit
 
 echo -e "\n${GREEN}${BOLD}Setup Complete!${NC}"
 echo -e "${GREEN}===================${NC}"

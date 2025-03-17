@@ -212,6 +212,8 @@ This dual-framework approach gives you flexibility to use the best tool for each
 
 The Jupyter extensions script creates a custom Jupyter configuration that provides code completion while eliminating annoying "missing server" messages.
 
+Following the jupyter extensions script the master downloads gemma-2b-it-4bit model, the simplest model which wil get you started on any ARM Mac
+
 ## Customizing Your Environment
 
 The environment is designed to be extended and customized. Here are some ways you might adapt it:
