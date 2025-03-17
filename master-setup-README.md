@@ -14,9 +14,9 @@ Before diving into the technical setup, let's consider why local AI development 
 
 Apple Silicon's unified memory architecture provides unique advantages for AI workloads - the CPU, GPU, and Neural Engine can all access the same physical memory without costly transfers, dramatically improving performance for these memory-intensive applications.
 
-## The Three-Part Setup System
+## The Two-Part Setup System
 
-To streamline the setup process, I've created a comprehensive system using three specialized scripts that handle everything you need for a productive AI development environment:
+To streamline the setup process, I've created a comprehensive system using specialized scripts that handle everything you need for a productive AI development environment:
 
 1. **master-setup.sh**: The main script that sets up your project structure and environment
 2. **download_models.py**: A utility script for downloading various AI models based on your hardware
@@ -73,6 +73,20 @@ One of the most valuable aspects of the master script is how it detects your Mac
 
 This guidance helps you choose models that will run efficiently on your hardware, avoiding out-of-memory errors and performance bottlenecks.
 
+Note that the master script also runs The Jupyter Extensions Script
+
+For data scientists and researchers, this script enhances your Jupyter notebook experience with powerful IDE-like features:
+
+This script installs and configures:
+
+- **Code Completion**: Through integration with language servers
+- **Syntax Checking**: Real-time error detection as you type
+- **Git Integration**: Version control right from your notebooks
+- **Code Formatting**: Automatic formatting with Black and isort
+- **Interactive Widgets**: For creating dynamic visualizations
+
+The script also silences those annoying "Skipped non-installed server" messages that typically appear when running Jupyter, providing a cleaner experience.
+
 ## The Model Downloader Script
 
 After running the master setup, you'll want to download AI models. The `download_models.py` script makes this process simple:
@@ -97,24 +111,6 @@ It supports multiple model options:
 - `phi-3-mini-4bit`: Microsoft's small but powerful model (8GB RAM)
 - `llama-3-8b-instruct-4bit`: Meta's Llama 3 model (16GB+ RAM)
 - `llama-3-70b-instruct-4bit`: The massive Llama 3 model (128GB+ RAM)
-
-## The Jupyter Extensions Script
-
-For data scientists and researchers, the third script enhances your Jupyter notebook experience with powerful IDE-like features:
-
-```bash
-bash scripts/jupyter_extensions.py
-```
-
-This script installs and configures:
-
-- **Code Completion**: Through integration with language servers
-- **Syntax Checking**: Real-time error detection as you type
-- **Git Integration**: Version control right from your notebooks
-- **Code Formatting**: Automatic formatting with Black and isort
-- **Interactive Widgets**: For creating dynamic visualizations
-
-The script also silences those annoying "Skipped non-installed server" messages that typically appear when running Jupyter, providing a cleaner experience.
 
 ## The Environment Activation Script: `go-ai`
 
@@ -152,7 +148,7 @@ After running the setup scripts, getting started is simple:
 2. Optionally enhance your Jupyter experience:
 
    ```bash
-   bash scripts/jupyter_extensions.py
+   bash scripts/jupyter_extensions.sh
    ```
 
 3. Download your first model:

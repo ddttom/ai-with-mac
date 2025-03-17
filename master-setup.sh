@@ -410,9 +410,9 @@ echo -e "\${CYAN}Python: \${BOLD}\$(python --version)\${NC}"
 echo -e "\${CYAN}Available models: \${BOLD}\$(ls -1 \$PROJECT_DIR/models 2>/dev/null | wc -l)\${NC} models found in models/ directory"
 echo ""
 echo -e "\${BLUE}Quick commands:\${NC}"
-echo -e "  \${GREEN}python scripts/download_models.py --help\${NC} - Download AI models"
-echo -e "  \${GREEN}python scripts/simple_chat.py --help\${NC} - Start chatting with a model"
-echo -e "  \${GREEN}jupyter notebook\${NC} - Launch Jupyter Notebook"
+echo -e "  \${GREEN}python scripts/download_models.py --help\${NC} # Download AI models"
+echo -e "  \${GREEN}python scripts/simple_chat.py --help\${NC} # Start chatting with a model"
+echo -e "  \${GREEN}jupyter notebook\${NC} # Launch Jupyter Notebook"
 echo ""
 echo -e "Enjoy your AI development session!"
 EOF
@@ -446,13 +446,15 @@ else
     echo -e "${YELLOW}Skipping go-ai script creation as requested.${NC}"
 fi
 
+bash scripts/jupyter_extensions.sh
+
 echo -e "\n${GREEN}${BOLD}Setup Complete!${NC}"
 echo -e "${GREEN}===================${NC}"
 echo -e "\n${CYAN}Your AI development environment is ready to use.${NC}"
 echo -e "${CYAN}To activate it, run: ${BOLD}source ~/bin/go-ai${NC}"
 echo -e "${CYAN}(You may need to restart your terminal first)${NC}"
 echo -e "\n${CYAN}Recommended next steps:${NC}"
-echo -e "1. ${YELLOW}Activate the environment:${NC} source ~/bin/go-ai"
+echo -e "1. ${YELLOW}Activate the environment:${NC} source ~/bin/go-ai
 echo -e "2. ${YELLOW}Download a model:${NC} python scripts/download_models.py --model ${RECOMMENDED_MODELS[0]}"
 echo -e "3. ${YELLOW}Start chatting:${NC} python scripts/simple_chat.py --model models/${RECOMMENDED_MODELS[0]}"
 echo -e "4. ${YELLOW}Explore notebooks:${NC} jupyter notebook"
