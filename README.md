@@ -1,6 +1,5 @@
 # AI with Mac
 
-
 A comprehensive guide and code repository for running AI models locally on Apple Silicon Macs.
 
 ## Overview
