@@ -384,7 +384,7 @@ echo -e "\033[0;32mHappy coding!\033[0m"
 EOF
 
     # Make the script executable
-    chmod +x "$HOME/bin/go-ai" || {
+    chmod +x "$HOME/bin/go-ai" || { 
         echo -e "${RED}Error: Could not make script executable. Trying with sudo...${NC}"
         sudo chmod +x "$HOME/bin/go-ai" || {
             echo -e "${RED}Error: Could not make script executable even with sudo.${NC}"
