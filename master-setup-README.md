@@ -14,6 +14,8 @@ Before diving into the technical setup, let's consider why local AI development 
 
 Apple Silicon's unified memory architecture provides unique advantages for AI workloads - the CPU, GPU, and Neural Engine can all access the same physical memory without costly transfers, dramatically improving performance for these memory-intensive applications.
 
+Before you can download models you must create an account with hugging face, the download script reminds you about this.
+
 ## The Two-Part Setup System
 
 To streamline the setup process, I've created a comprehensive system using specialized scripts that handle everything you need for a productive AI development environment:
