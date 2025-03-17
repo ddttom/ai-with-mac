@@ -388,6 +388,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
+YELLOW='\033[0;33m'
 BOLD='\033[1m'
 NC='\033[0m' # No Color
 
@@ -402,6 +403,16 @@ fi
 echo -e "\${CYAN}Activating AI environment...\${NC}"
 cd "\$PROJECT_DIR"
 source "\$VENV_DIR/bin/activate"
+
+# Check if models directory is empty and download a default model if needed
+MODEL_COUNT=\$(ls -1 "\$PROJECT_DIR/models" 2>/dev/null | wc -l | tr -d ' ')
+if [ "\$MODEL_COUNT" -eq 0 ]; then
+    echo -e "\${YELLOW}No models found in the models directory.\${NC}"
+    echo -e "\${CYAN}Installing gemma-2b-it-4bit model...\${NC}"
+    python scripts/download_models.py --model gemma-2b-it-4bit
+else
+    echo -e "\${GREEN}Found \$MODEL_COUNT model(s) in the models directory.\${NC}"
+fi
 
 # Print success message
 echo -e "\${GREEN}\${BOLD}AI environment activated!\${NC}"
@@ -448,8 +459,6 @@ fi
 
 echo -e "\n${CYAN}Installing Jupyter extensions...${NC}"
 bash scripts/jupyter_extensions.sh
-echo -e "\n${CYAN}Installing gemma-2b-it-4bit model...${NC}"
-python scripts/download_models.py --model gemma-2b-it-4bit
 
 echo -e "\n${GREEN}${BOLD}Setup Complete!${NC}"
 echo -e "${GREEN}===================${NC}"
@@ -457,7 +466,7 @@ echo -e "\n${CYAN}Your AI development environment is ready to use.${NC}"
 echo -e "${CYAN}To activate it, run: ${BOLD}source ~/bin/go-ai${NC}"
 echo -e "${CYAN}(You may need to restart your terminal first)${NC}"
 echo -e "\n${CYAN}Recommended next steps:${NC}"
-echo -e "1. ${YELLOW}Activate the environment:${NC} source ~/bin/go-ai
+echo -e "1. ${YELLOW}Activate the environment:${NC} source ~/bin/go-ai"
 echo -e "2. ${YELLOW}Download a model:${NC} python scripts/download_models.py --model ${RECOMMENDED_MODELS[0]}"
 echo -e "3. ${YELLOW}Start chatting:${NC} python scripts/simple_chat.py --model models/${RECOMMENDED_MODELS[0]}"
 echo -e "4. ${YELLOW}Explore notebooks:${NC} jupyter notebook"

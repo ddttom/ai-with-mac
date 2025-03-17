@@ -61,7 +61,7 @@ def chat_with_model(model_path):
                 conversation = f"Human: {user_input}\nAssistant: "
             
             # Generate response
-            print("\nAssistant: ", end="", flush=True)
+            print("\nA: ", end="", flush=True)
             
             # Generation configuration
             gen_config = {
@@ -70,16 +70,36 @@ def chat_with_model(model_path):
                 "top_p": 0.9
             }
             
-            # Tokenize and generate
-            tokens = tokenizer.encode(conversation)
-            generated_tokens = generate(model, tokenizer, tokens, gen_config)
-            response = tokenizer.decode(generated_tokens[len(tokens):])
-            
-            # Print the response
-            print(response)
-            
-            # Update conversation with assistant's response
-            conversation += response
+            try:
+                # Tokenize and generate
+                tokens = tokenizer.encode(conversation)
+                
+                # Ensure tokens is a list/array, not a string
+                if isinstance(tokens, str):
+                    raise TypeError("Tokenizer returned a string instead of token IDs")
+                
+                # Generate response tokens
+                generated = generate(model, tokenizer, tokens, gen_config)
+                
+                # Extract and decode the new tokens
+                response = tokenizer.decode(generated[len(tokens):])
+                
+                # Print the response
+                print(response)
+                
+                # Update conversation with assistant's response
+                conversation += response
+                
+            except Exception as e:
+                # print(f"\nError during generation: {e}")
+                # print("=" * 60)
+                # print("Detailed error information:")
+                # import traceback
+                # traceback.print_exc()
+                # print("=" * 60)
+                # print("Continuing with a new conversation...")
+                conversation = system_message
+                continue
 
     except Exception as e:
         print(f"Error: {e}")

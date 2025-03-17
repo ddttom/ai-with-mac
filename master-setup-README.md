@@ -166,6 +166,8 @@ After running the setup scripts, getting started is simple:
 5. Start chatting with your model:
 
    ```bash
+
+   python scripts/download_models.py --model gemma-2b-it-4bit
    python scripts/simple_chat.py --model models/gemma-2b-it-4bit
    ```
 
