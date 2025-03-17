@@ -34,7 +34,7 @@ The core of our system is the `master-setup.sh` script, which:
 4. Sets up a properly configured Python environment
 5. Installs frameworks optimized for Apple Silicon (MLX and PyTorch)
 6. Copies relevant examples from the source repository to your project directory
-7. Creates a convenient `go-ai` command to activate everything
+7. Creates a convenient `go-ai` activation script to set up your environment
 
 The script follows several key principles:
 
@@ -50,13 +50,13 @@ When you run the master setup script, it will:
 2. Verify it's being run from within the "AI with Mac" repository
 3. Store the current directory as the source repository for examples
 4. Ask where you want to create your AI environment (default: `~/play-with-AI`)
-5. Check if you have existing configurations to avoid overwriting them
+5. Check if you have existing configurations and ask for permission before overwriting them
 6. Detect your system's hardware capabilities and RAM
 7. Install required dependencies (Homebrew, Python, Git if needed)
 8. Create a complete project structure in your specified directory
 9. Set up a Python virtual environment with all necessary packages
 10. Copy examples, notebooks, and scripts from the source repository to your project
-11. Create the `go-ai` command for easy environment activation
+11. Create the `go-ai` activation script for easy environment activation
 
 ## Hardware-Aware Model Recommendations
 
@@ -116,19 +116,24 @@ This script installs and configures:
 
 The script also silences those annoying "Skipped non-installed server" messages that typically appear when running Jupyter, providing a cleaner experience.
 
-## The Standalone Launcher: `go-ai`
+## The Environment Activation Script: `go-ai`
 
-Perhaps the most convenient feature is the `go-ai` command created by the master setup script. This standalone launcher:
+Perhaps the most convenient feature is the `go-ai` activation script created by the master setup script. This script:
 
 1. Changes to your AI project directory
 2. Activates the Python virtual environment
 3. Displays helpful information about available models and resources
 4. Provides quick command references
-5. Starts a new shell session for your AI work
 
-To exit this environment, you simply type `exit` or press Ctrl+D, and you'll return to your previous shell session.
+**Important**: The `go-ai` script must be sourced, not executed. This means you should run it using:
 
-The launcher script is placed in `~/bin` and made executable, making it accessible from anywhere in your terminal. If `~/bin` isn't already in your PATH, the setup script adds it for you.
+```bash
+source ~/bin/go-ai
+```
+
+This is necessary because the script needs to change your current directory and activate the virtual environment in your current shell session, which can only be done when the script is sourced.
+
+The activation script is placed in `~/bin` and made executable, making it accessible from anywhere in your terminal. If `~/bin` isn't already in your PATH, the setup script adds it for you.
 
 ## Getting Started With Your AI Environment
 
@@ -159,7 +164,7 @@ After running the setup scripts, getting started is simple:
 4. Start using your environment:
 
    ```bash
-   go-ai
+   source ~/bin/go-ai
    ```
 
 5. Start chatting with your model:
@@ -174,7 +179,7 @@ After running the setup scripts, getting started is simple:
    jupyter notebook
    ```
 
-The environment comes with scripts already prepared for common tasks, copied from the source repository to your project directory. The launcher provides reminders of these commands whenever you start a session and will show you which models you have installed.
+The environment comes with scripts already prepared for common tasks, copied from the source repository to your project directory. The activation script provides reminders of these commands whenever you start a session and will show you which models you have installed.
 
 ## Technical Details
 

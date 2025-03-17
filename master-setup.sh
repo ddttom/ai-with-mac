@@ -85,21 +85,20 @@ DEFAULT_PROJECT_DIR="$HOME/play-with-AI"
 read -p "Enter new project directory [$DEFAULT_PROJECT_DIR]: " PROJECT_DIR
 PROJECT_DIR=${PROJECT_DIR:-$DEFAULT_PROJECT_DIR}
 
-# Check if go-ai already exists and if it points to the correct directory
+# Check if go-ai already exists and ask for permission to overwrite
 GO_AI_REPLACE="y"  # Default to yes if script doesn't exist
 if [ -f "$HOME/bin/go-ai" ]; then
     CURRENT_PATH=$(grep "PROJECT_DIR=" "$HOME/bin/go-ai" | head -1 | cut -d'"' -f2)
     if [ "$CURRENT_PATH" = "$PROJECT_DIR" ]; then
-        echo -e "${GREEN}Found existing go-ai script already pointing to $PROJECT_DIR${NC}"
-        echo -e "${YELLOW}Script will be updated with the latest features${NC}"
+        echo -e "${YELLOW}A 'go-ai' script already exists and points to the same directory: ${BLUE}$PROJECT_DIR${NC}"
     else
         echo -e "${YELLOW}A 'go-ai' script already exists but points to a different directory:${NC}"
         echo -e "${BLUE}Current: $CURRENT_PATH${NC}"
         echo -e "${BLUE}New: $PROJECT_DIR${NC}"
-        read -p "Do you want to update it to point to the new directory? (y/n) " -n 1 -r
-        echo
-        GO_AI_REPLACE=$REPLY
     fi
+    read -p "Do you want to overwrite the existing go-ai script? (y/n) " -n 1 -r
+    echo
+    GO_AI_REPLACE=$REPLY
 fi
 
 # Get RAM size
@@ -213,7 +212,7 @@ based on the "AI with Mac" guide.
 To activate the environment, simply run:
 
 \`\`\`
-go-ai
+source ~/bin/go-ai
 \`\`\`
 
 ## What's Included
@@ -241,7 +240,7 @@ Source: $REPO_DIR
 
 ## Getting Started
 
-1. Activate the environment: \`go-ai\`
+1. Activate the environment: \`source ~/bin/go-ai\`
 2. Download a model: \`python scripts/download_models.py --model ${RECOMMENDED_MODELS[0]}\`
 3. Start chatting: \`python scripts/simple_chat.py --model models/${RECOMMENDED_MODELS[0]}\`
 4. Explore notebooks: \`jupyter notebook\`
@@ -255,6 +254,20 @@ echo -e "${CYAN}=======================${NC}"
 echo -ne "Creating virtual environment... "
 python3 -m venv ai-env
 echo -e "${GREEN}Done!${NC}"
+
+# Modify the virtual environment's activate script to use a simple prompt
+echo -ne "Customizing virtual environment... "
+ACTIVATE_SCRIPT="$PROJECT_DIR/ai-env/bin/activate"
+if [ -f "$ACTIVATE_SCRIPT" ]; then
+    # Backup the original activate script
+    cp "$ACTIVATE_SCRIPT" "${ACTIVATE_SCRIPT}.bak"
+    
+    # Replace the PS1 setting in the activate script
+    sed -i '' 's/PS1="(ai-env) \$PS1"/PS1="(ai-env) $ "/' "$ACTIVATE_SCRIPT"
+    echo -e "${GREEN}Done!${NC}"
+else
+    echo -e "${YELLOW}Could not find activate script. Prompt customization skipped.${NC}"
+fi
 
 echo -ne "Activating virtual environment... "
 source ai-env/bin/activate
@@ -356,33 +369,39 @@ if [[ "$GO_AI_REPLACE" =~ ^[Yy]$ ]]; then
 
 # AI with Mac - Environment Activation Script
 # This script activates the AI development environment
+# IMPORTANT: This script must be sourced, not executed
+# Usage: source ~/bin/go-ai
+
+# Exit if the script is executed instead of sourced
+if [[ "\${BASH_SOURCE[0]}" == "\${0}" ]]; then
+    echo "Error: This script must be sourced, not executed."
+    echo "Please use: source ~/bin/go-ai"
+    exit 1
+fi
 
 # Configuration
 PROJECT_DIR="$PROJECT_DIR"
 VENV_DIR="\$PROJECT_DIR/ai-env"
 
 # ANSI color codes
+RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
 NC='\033[0m' # No Color
 
-
 # Check if virtual environment exists
 if [ ! -d "\$VENV_DIR" ]; then
     echo -e "\${RED}Error: Virtual environment not found at \$VENV_DIR\${NC}"
     echo "Please run the setup script first."
-    exit 1
+    return 1
 fi
 
-# Activate virtual environment
+# Change to project directory and activate virtual environment
 echo -e "\${CYAN}Activating AI environment...\${NC}"
 cd "\$PROJECT_DIR"
 source "\$VENV_DIR/bin/activate"
-
-# Set PS1 to show we're in the AI environment
-export PS1="(ai-env) \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
 
 # Print success message
 echo -e "\${GREEN}\${BOLD}AI environment activated!\${NC}"
@@ -430,11 +449,26 @@ fi
 echo -e "\n${GREEN}${BOLD}Setup Complete!${NC}"
 echo -e "${GREEN}===================${NC}"
 echo -e "\n${CYAN}Your AI development environment is ready to use.${NC}"
-echo -e "${CYAN}To activate it, run: ${BOLD}go-ai${NC}"
+echo -e "${CYAN}To activate it, run: ${BOLD}source ~/bin/go-ai${NC}"
 echo -e "${CYAN}(You may need to restart your terminal first)${NC}"
 echo -e "\n${CYAN}Recommended next steps:${NC}"
-echo -e "1. ${YELLOW}Activate the environment:${NC} go-ai"
+echo -e "1. ${YELLOW}Activate the environment:${NC} source ~/bin/go-ai"
 echo -e "2. ${YELLOW}Download a model:${NC} python scripts/download_models.py --model ${RECOMMENDED_MODELS[0]}"
 echo -e "3. ${YELLOW}Start chatting:${NC} python scripts/simple_chat.py --model models/${RECOMMENDED_MODELS[0]}"
 echo -e "4. ${YELLOW}Explore notebooks:${NC} jupyter notebook"
+
+echo -e "\n${CYAN}We've included a specialized .gitignore file:${NC}"
+echo -e "${YELLOW}This .gitignore is specifically configured for AI development work,${NC}"
+echo -e "${YELLOW}preventing large model files, datasets, and sensitive information from being committed.${NC}"
+
+echo -e "\n${CYAN}Version control with GitHub:${NC}"
+echo -e "5. ${YELLOW}Initialize Git repository:${NC} git init"
+echo -e "6. ${YELLOW}Add your files:${NC} git add ."
+echo -e "7. ${YELLOW}Create first commit:${NC} git commit -m \"Initial commit\""
+echo -e "8. ${YELLOW}Create GitHub repository:${NC} Visit github.com/new"
+echo -e "9. ${YELLOW}Connect and push:${NC} git remote add origin YOUR_REPO_URL && git push -u origin main"
+echo -e "\n${CYAN}To preserve your versions and track changes, commit regularly with descriptive messages:${NC}"
+echo -e "    ${YELLOW}git add [files]${NC}"
+echo -e "    ${YELLOW}git commit -m \"Description of changes\"${NC}"
+echo -e "    ${YELLOW}git push${NC}"
 echo -e "\n${CYAN}Happy AI development!${NC}"
