@@ -20,7 +20,19 @@ ai-with-mac/
 ├── README.md
 ├── data/                # Example datasets and data files
 ├── docs/
-│   └── the essential gitignore file for apple AI projects.md
+│   ├── prd.md           # Product Requirements Document
+│   ├── web/             # Web documentation files
+│   │   ├── Part 1 - AI with Mac - Running AI Locally on a mac
+│   │   ├── Part 2 - Getting Started with Python and Git for AI Development on Mac
+│   │   └── ...
+│   └── images/          # Documentation images
+│       ├── part1/
+│       │   ├── apple-silicon-ai-hero.svg
+│       │   ├── mac-hardware-comparison.svg
+│       │   ├── unified-memory-architecture.svg
+│       │   └── llm-performance-comparison.svg
+│       ├── part2/
+│       └── ...
 ├── master-setup-README.md
 ├── master-setup.sh
 ├── models/              # Directory for storing ML models
@@ -91,6 +103,8 @@ ai-with-mac/
 ├── part6/               # Glossary of terms
 ├── requirements.txt
 └── scripts/
+    ├── download_models.py
+    ├── jupyter_extensions.sh
     └── test_setup.py
 ```
 
@@ -202,13 +216,13 @@ Then visit <http://localhost:5000> in your browser.
 
 Performance varies significantly based on your specific Mac hardware:
 
-| Memory | Typical Use Cases |
-|------------------|--------|------------------|
-| 8GB RAM | Small models (2-4B parameters), 4-bit quantization |
-| 16GB RAM | Medium models (up to 7B parameters), mixed precision |
-| 32GB RAM | Larger models (up to 13B parameters), multiple tasks |
-| 64GB RAM | Multiple models simultaneously, higher precision |
-| 128GB+ RAM (Mac Studio/Pro) | Largest open models (70B+), model training |
+| Memory                      | Typical Use Cases                                    |
+| --------------------------- | ---------------------------------------------------- |  |
+| 8GB RAM                     | Small models (2-4B parameters), 4-bit quantization   |
+| 16GB RAM                    | Medium models (up to 7B parameters), mixed precision |
+| 32GB RAM                    | Larger models (up to 13B parameters), multiple tasks |
+| 64GB RAM                    | Multiple models simultaneously, higher precision     |
+| 128GB+ RAM (Mac Studio/Pro) | Largest open models (70B+), model training           |
 
 ## Model Management
 
@@ -231,15 +245,38 @@ For large model files, we recommend using Git LFS:
 bash part5/setup_git_lfs.sh
 ```
 
+## Documentation and Images
+
+This repository includes comprehensive documentation with instructional articles and diagrams:
+
+- **Documentation**: Located in the `docs/web/` directory
+- **Images**: Located in the `docs/images/` directory, organized by part
+
+### Image Guidelines
+
+When contributing to the documentation:
+
+1. Store all images in the appropriate subdirectory under `docs/images/part[X]/`
+2. Use SVG format for diagrams and charts for better scalability
+3. Reference images in documentation using relative paths: `../images/part[X]/filename.svg`
+4. Include descriptive alt text and figure captions
+
+Example image reference in Markdown:
+
+```markdown
+![Performance Comparison](../images/part3/performance-chart.svg)
+*Figure 4: Comparison of token generation speeds across different models.*
+```
+
 ## Articles in the Series
 
-1. [Introduction to AI on Mac](https://yourblog.com/ai-with-mac-part1)
-2. [Getting Started with Python and Git](https://yourblog.com/ai-with-mac-part2)
-3. [Running LLMs on Apple Silicon](https://yourblog.com/ai-with-mac-part3)
-4. [Comparing MLX and PyTorch](https://yourblog.com/ai-with-mac-part4)
-5. [Choosing the Right Method](https://yourblog.com/ai-with-mac-part5)
-6. [Glossary](https://yourblog.com/ai-with-mac-part6)
-7. [The Essential .gitignore Guide](https://yourblog.com/ai-with-mac-gitignore)
+1. [Introduction to AI on Mac](docs/web/Part%201%20-%20AI%20with%20Mac%20-%20Running%20AI%20Locally%20on%20a%20mac)
+2. [Getting Started with Python and Git](docs/web/Part%202%20-%20Getting%20Started%20with%20Python%20and%20Git%20for%20AI%20Development%20on%20Mac)
+3. [Running LLMs on Apple Silicon](docs/web/Part%203%20-%20Running%20LLMs%20on%20Apple%20Silicon%20-%20A%20Step-by-Step%20Guide)
+4. [Comparing MLX and PyTorch](docs/web/Part%204%20-%20Comparing%20MLX%20and%20PyTorch%20for%20Machine%20Learning%20on%20Apple%20Silicon)
+5. [Choosing the Right Method](docs/web/Part%205%20-%20Machine%20Learning%20on%20Apple%20Silicon%3A%20Choosing%20the%20Right%20Method)
+6. [Glossary](docs/web/Part%206%20-%20Glossary)
+7. [The Essential .gitignore Guide](docs/web/Part%207%20-%20The%20essential%20gitignore%20file%20for%20mac%20AI%20projects)
 
 ## Contributing
 
@@ -250,6 +287,14 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+When contributing:
+
+- Follow the established directory structure
+- Use descriptive commit messages
+- Update documentation as needed
+- Add appropriate images for new features or concepts
+- Ensure code examples are tested
 
 ## License
 

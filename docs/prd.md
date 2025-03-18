@@ -108,6 +108,100 @@ Working implementations of:
 - Time series forecasting
 - Multi-modal capabilities
 
+## Documentation and Image Guidelines
+
+### Directory Structure for Images
+
+All images should follow this directory structure:
+
+```bash
+docs/
+├── web/
+│   ├── Part 1 - AI with Mac - Running AI Locally on a mac
+│   ├── Part 2 - Getting Started with Python and Git for AI Development on Mac
+│   └── ...
+└── images/
+    ├── part1/
+    │   ├── apple-silicon-ai-hero.svg
+    │   ├── mac-hardware-comparison.svg
+    │   ├── unified-memory-architecture.svg
+    │   └── llm-performance-comparison.svg
+    ├── part2/
+    │   └── ...
+    └── ...
+
+```
+
+### Image Format Guidelines
+
+1. **Preferred Formats**:
+   - SVG: For diagrams, charts, and illustrations
+   - PNG: For screenshots and photos when vector is not possible
+   - JPEG: Only for photographic content where file size optimization is critical
+
+2. **SVG Requirements**:
+   - All technical diagrams should be created as SVGs for scalability
+   - Include appropriate text elements within SVGs for accessibility
+   - Use consistent color schemes aligned with the project palette
+   - Optimize SVGs to remove unnecessary metadata
+
+3. **Image Dimensions**:
+   - Hero images: 1200 × 400 pixels
+   - Diagrams: 800 × variable height (depending on content)
+   - Screenshots: Maintain original resolution but optimize file size
+
+### Image References in Markdown
+
+When referencing images in Markdown documents, use the following convention:
+
+```markdown
+![Alt text](../images/part1/image-name.svg)
+*Figure X: Descriptive caption that explains the content of the image.*
+```
+
+The path `../images/part1/` indicates a relative path from the Markdown document (in `docs/web/`) to the images directory.
+
+Always include:
+
+- Descriptive alt text for accessibility
+- Figure number
+- Detailed caption that provides context about the image
+
+### Required Images for Each Part
+
+#### Part 1: Introduction to AI on Mac
+
+- Hero image showing Apple Silicon and AI
+- Mac hardware comparison chart
+- Unified memory architecture diagram
+- LLM performance comparison chart
+
+#### Part 2: Getting Started with Python and Git
+
+- Environment setup diagram
+- Terminal commands/workflow diagram
+- Project structure visualization
+
+#### Part 3: Running LLMs on Apple Silicon
+
+- Model size vs. memory requirements chart
+- Performance optimization workflow
+- Quantization visualization
+- Inference pipeline diagram
+
+#### Part 4: Comparing MLX and PyTorch
+
+- Framework comparison diagram
+- Performance benchmark charts
+- API comparison visualization
+- Workflow decision tree
+
+#### Part 5: Choosing the Right Method
+
+- Decision framework diagram
+- Integration architecture diagram
+- Use case workflow visualizations
+
 ## Development Timeline
 
 ### Phase 1: Core Content Development
@@ -149,11 +243,10 @@ Working implementations of:
 ## Future Expansion Opportunities
 
 1. Expanded model support as new models are released
-2. Integration with Apple's Core ML ecosystem
-3. iOS/iPadOS deployment examples
-4. Fine-tuning and training examples for smaller models
-5. Multi-modal AI applications (text, image, audio)
-6. Edge AI and on-device learning techniques
+2. iOS/iPadOS deployment examples
+3. Fine-tuning and training examples for smaller models
+4. Multi-modal AI applications (text, image, audio)
+5. Edge AI and on-device learning techniques
 
 ## Conclusion
 
