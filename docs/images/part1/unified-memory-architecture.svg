@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+    <!-- Background -->
+    <rect width="800" height="600" fill="#f8f8f8" />
+
+    <!-- Title -->
+    <text x="400" y="50" font-family="Arial" font-size="20" font-weight="bold" fill="#333"
+        text-anchor="middle">Unified Memory vs Traditional Architecture</text>
+
+    <!-- Left side: Traditional Architecture -->
+    <g transform="translate(50, 100)">
+        <text x="150" y="0" font-family="Arial" font-size="16" font-weight="bold" fill="#333"
+            text-anchor="middle">Traditional Architecture</text>
+
+        <!-- CPU Block -->
+        <rect x="50" y="30" width="200" height="100" rx="5" ry="5" fill="#0071e3" opacity="0.8" />
+        <text x="150" y="80" font-family="Arial" font-size="14" font-weight="bold" fill="white"
+            text-anchor="middle">CPU</text>
+
+        <!-- CPU Memory -->
+        <rect x="50" y="150" width="200" height="60" rx="5" ry="5" fill="#0071e3" opacity="0.4"
+            stroke="#0071e3" />
+        <text x="150" y="185" font-family="Arial" font-size="14" fill="#333" text-anchor="middle">System
+            Memory (RAM)</text>
+
+        <!-- Connection lines -->
+        <line x1="150" y1="130" x2="150" y2="150" stroke="#0071e3" stroke-width="3" />
+
+        <!-- GPU Block -->
+        <rect x="50" y="250" width="200" height="100" rx="5" ry="5" fill="#FF675E" opacity="0.8" />
+        <text x="150" y="300" font-family="Arial" font-size="14" font-weight="bold" fill="white"
+            text-anchor="middle">GPU</text>
+
+        <!-- GPU Memory -->
+        <rect x="50" y="370" width="200" height="60" rx="5" ry="5" fill="#FF675E" opacity="0.4"
+            stroke="#FF675E" />
+        <text x="150" y="405" font-family="Arial" font-size="14" fill="#333" text-anchor="middle">Video
+            Memory (VRAM)</text>
+
+        <!-- Connection lines -->
+        <line x1="150" y1="350" x2="150" y2="370" stroke="#FF675E" stroke-width="3" />
+
+        <!-- Data transfer -->
+        <path d="M 170 210 C 210 220, 210 240, 170 250" stroke="#333" stroke-width="2" fill="none"
+            marker-end="url(#arrow)" stroke-dasharray="5,3" />
+        <path d="M 130 250 C 90 240, 90 220, 130 210" stroke="#333" stroke-width="2" fill="none"
+            marker-end="url(#arrow)" stroke-dasharray="5,3" />
+
+        <text x="250" y="230" font-family="Arial" font-size="12" fill="#333">Slow data</text>
+        <text x="250" y="245" font-family="Arial" font-size="12" fill="#333">transfers</text>
+    </g>
+
+    <!-- Right side: Unified Memory Architecture -->
+    <g transform="translate(400, 100)">
+        <text x="150" y="0" font-family="Arial" font-size="16" font-weight="bold" fill="#333"
+            text-anchor="middle">Apple Silicon Unified Memory</text>
+
+        <!-- Combined memory pool -->
+        <rect x="0" y="150" width="300" height="140" rx="10" ry="10" fill="#67B37F" opacity="0.3"
+            stroke="#67B37F" stroke-width="2" />
+        <text x="150" y="220" font-family="Arial" font-size="16" font-weight="bold" fill="#333"
+            text-anchor="middle">Unified Memory</text>
+
+        <!-- CPU Block -->
+        <rect x="30" y="30" width="100" height="100" rx="5" ry="5" fill="#0071e3" opacity="0.8" />
+        <text x="80" y="80" font-family="Arial" font-size="14" font-weight="bold" fill="white"
+            text-anchor="middle">CPU</text>
+
+        <!-- Connection lines -->
+        <line x1="80" y1="130" x2="80" y2="170" stroke="#0071e3" stroke-width="3" />
+        <circle cx="80" cy="170" r="5" fill="#0071e3" />
+
+        <!-- GPU Block -->
+        <rect x="160" y="30" width="100" height="100" rx="5" ry="5" fill="#FF675E" opacity="0.8" />
+        <text x="210" y="80" font-family="Arial" font-size="14" font-weight="bold" fill="white"
+            text-anchor="middle">GPU</text>
+
+        <!-- Connection lines -->
+        <line x1="210" y1="130" x2="210" y2="170" stroke="#FF675E" stroke-width="3" />
+        <circle cx="210" cy="170" r="5" fill="#FF675E" />
+
+        <!-- Neural Engine -->
+        <rect x="100" y="310" width="100" height="60" rx="5" ry="5" fill="#67B37F" opacity="0.8" />
+        <text x="150" y="345" font-family="Arial" font-size="12" font-weight="bold" fill="white"
+            text-anchor="middle">Neural Engine</text>
+
+        <!-- Connection lines -->
+        <line x1="150" y1="310" x2="150" y2="290" stroke="#67B37F" stroke-width="3" />
+        <circle cx="150" cy="290" r="5" fill="#67B37F" />
+
+        <!-- Direct memory access -->
+        <text x="320" y="170" font-family="Arial" font-size="12" fill="#333">Zero-copy</text>
+        <text x="320" y="185" font-family="Arial" font-size="12" fill="#333">operations</text>
+        <text x="320" y="200" font-family="Arial" font-size="12" fill="#333">No transfers</text>
+        <text x="320" y="215" font-family="Arial" font-size="12" fill="#333">needed</text>
+
+        <!-- AI Workload arrows -->
+        <path d="M 40 395 C 150 390, 250 390, 260 395" stroke="#67B37F" stroke-width="2"
+            stroke-dasharray="4,2" fill="none" />
+        <text x="150" y="420" font-family="Arial" font-size="14" fill="#333" text-anchor="middle">Efficient
+            AI Workloads</text>
+    </g>
+
+    <!-- Arrow marker definition -->
+    <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#333" />
+        </marker>
+    </defs>
+</svg>

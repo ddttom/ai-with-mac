@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+    <!-- Background gradient -->
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#19191A" />
+            <stop offset="100%" stop-color="#323236" />
+        </linearGradient>
+        <linearGradient id="chipGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#444" />
+            <stop offset="100%" stop-color="#222" />
+        </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect width="1200" height="400" fill="url(#bgGradient)" />
+
+    <!-- Apple Silicon chip representation -->
+    <g transform="translate(200, 100)">
+        <!-- Chip base -->
+        <rect x="0" y="0" width="300" height="200" rx="15" ry="15" fill="url(#chipGradient)"
+            stroke="#555" stroke-width="2" />
+
+        <!-- Chip circuit lines -->
+        <path
+            d="M 30 30 H 270 M 30 60 H 270 M 30 90 H 270 M 30 120 H 270 M 30 150 H 270 M 30 180 H 270"
+            stroke="#777" stroke-width="1" />
+        <path d="M 60 30 V 180 M 120 30 V 180 M 180 30 V 180 M 240 30 V 180" stroke="#777"
+            stroke-width="1" />
+
+        <!-- Processing units -->
+        <rect x="45" y="45" width="30" height="30" rx="3" ry="3" fill="#0071e3" opacity="0.8" />
+        <rect x="105" y="45" width="30" height="30" rx="3" ry="3" fill="#0071e3" opacity="0.8" />
+        <rect x="165" y="45" width="30" height="30" rx="3" ry="3" fill="#0071e3" opacity="0.8" />
+        <rect x="225" y="45" width="30" height="30" rx="3" ry="3" fill="#0071e3" opacity="0.8" />
+
+        <rect x="45" y="105" width="30" height="30" rx="3" ry="3" fill="#67B37F" opacity="0.8" />
+        <rect x="105" y="105" width="30" height="30" rx="3" ry="3" fill="#67B37F" opacity="0.8" />
+        <rect x="165" y="105" width="30" height="30" rx="3" ry="3" fill="#67B37F" opacity="0.8" />
+        <rect x="225" y="105" width="30" height="30" rx="3" ry="3" fill="#67B37F" opacity="0.8" />
+
+        <!-- Neural Engine -->
+        <rect x="110" y="145" width="80" height="30" rx="3" ry="3" fill="#FF675E" opacity="0.8" />
+        <text x="150" y="165" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Neural
+            Engine</text>
+
+        <!-- Label -->
+        <text x="150" y="220" font-family="Arial" font-size="18" font-weight="bold" fill="white"
+            text-anchor="middle">Apple Silicon</text>
+    </g>
+
+    <!-- AI models flowing from chip -->
+    <g transform="translate(550, 150)">
+        <!-- AI data flow lines -->
+        <path d="M -50 0 C 0 -50, 100 -50, 150 0" stroke="#0071e3" stroke-width="3" fill="none" />
+        <path d="M -50 0 C 0 0, 100 0, 150 0" stroke="#67B37F" stroke-width="3" fill="none" />
+        <path d="M -50 0 C 0 50, 100 50, 150 0" stroke="#FF675E" stroke-width="3" fill="none" />
+
+        <!-- AI Models -->
+        <g transform="translate(200, 0)">
+            <!-- LLM -->
+            <rect x="-30" y="-60" width="180" height="40" rx="5" ry="5" fill="#0071e3" />
+            <text x="60" y="-35" font-family="Arial" font-size="16" font-weight="bold" fill="white"
+                text-anchor="middle">Language Models</text>
+
+            <!-- Computer Vision -->
+            <rect x="-30" y="-10" width="180" height="40" rx="5" ry="5" fill="#67B37F" />
+            <text x="60" y="15" font-family="Arial" font-size="16" font-weight="bold" fill="white"
+                text-anchor="middle">Computer Vision</text>
+
+            <!-- Audio AI -->
+            <rect x="-30" y="40" width="180" height="40" rx="5" ry="5" fill="#FF675E" />
+            <text x="60" y="65" font-family="Arial" font-size="16" font-weight="bold" fill="white"
+                text-anchor="middle">Speech Recognition</text>
+        </g>
+    </g>
+
+    <!-- Title -->
+    <text x="600" y="50" font-family="Arial" font-size="30" font-weight="bold" fill="white"
+        text-anchor="middle">AI with Mac: Running AI Locally on Apple Silicon</text>
+</svg>

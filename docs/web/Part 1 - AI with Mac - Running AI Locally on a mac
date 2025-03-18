@@ -1,6 +1,6 @@
-# Part 1: AI with Mac - Running AI Locally on a mac
+# Part 1: AI with Mac - Running AI Locally on a Mac
 
-![Apple Silicon and AI](https://via.placeholder.com/1200x400)
+![Apple Silicon and AI](../images/part1/apple-silicon-ai-hero.svg)
 
 ## Welcome to the Revolution
 
@@ -15,6 +15,15 @@ You might be wondering, "Why should I run AI locally when there are plenty of cl
 3. **No Internet Dependency**: Work offline anytime, anywhere
 4. **Lower Latency**: Eliminate network delays
 5. **Learning Opportunity**: Gain deeper understanding of AI systems
+
+## Performance Benchmarks Across Mac Models
+
+When running language models locally, performance varies significantly based on your specific Mac hardware. Our testing reveals notable differences in token generation speeds across the Apple Silicon lineup:
+
+![LLM Performance by Mac Model](../images/part1/llm-performance-comparison.svg)
+*Figure 2: Graph comparing token generation speeds across different Apple Silicon Mac models for various LLM sizes, showing the relationship between hardware capabilities, model size, and inference speed.*
+
+As the chart illustrates, smaller models like Gemma 2B perform reasonably well even on entry-level M1 chips, while the largest models (70B+ parameters) require the more powerful Mac Studio or Mac Pro configurations with M2/M3/M4 Ultra chips to achieve usable performance. The Ultra variants with their dual-chip design show a substantial performance advantage for all model sizes.
 
 ## What's Possible on Apple Silicon?
 
@@ -56,17 +65,17 @@ While we'll start from the basics, you'll have an easier time if you:
 
 Your experience will vary based on your specific Mac configuration:
 
-![Mac Hardware Comparison Chart](https://via.placeholder.com/800x400?text=Mac+Hardware+Comparison)
-*Figure 2: Comparison chart showing different Mac models with Apple Silicon (MacBook Air, MacBook Pro, iMac, Mac Studio, and Mac Pro) and their AI performance capabilities with various model sizes.*
+![Mac Hardware Comparison Chart](../images/part1/mac-hardware-comparison.svg)
+*Figure 3: Comparison chart showing different Mac models with Apple Silicon (MacBook Air, MacBook Pro, iMac, Mac Studio, and Mac Pro) and their AI performance capabilities with various model sizes.*
 
-| Mac Configuration | Memory | Typical Use Cases |
-|------------------|--------|------------------|
-| 8GB RAM | Entry-level | Small models (4B parameters), basic tasks |
-| 16GB RAM | Standard | Medium models (up to 13B parameters), everyday use |
-| 32GB RAM | Professional | Large models (up to 30B parameters), serious work |
-| 64GB RAM | High-end | Multiple models simultaneously, advanced tasks |
-| 128-192GB RAM | Mac Studio/Pro | Largest open models (70B+), multiple concurrent workloads |
-| 256-512GB RAM | Mac Pro with M2/M4 Ultra | Enterprise-grade workloads, model training, research |
+| Mac Configuration | Memory                   | Typical Use Cases                                         |
+| ----------------- | ------------------------ | --------------------------------------------------------- |
+| 8GB RAM           | Entry-level              | Small models (4B parameters), basic tasks                 |
+| 16GB RAM          | Standard                 | Medium models (up to 13B parameters), everyday use        |
+| 32GB RAM          | Professional             | Large models (up to 30B parameters), serious work         |
+| 64GB RAM          | High-end                 | Multiple models simultaneously, advanced tasks            |
+| 128-192GB RAM     | Mac Studio/Pro           | Largest open models (70B+), multiple concurrent workloads |
+| 256-512GB RAM     | Mac Pro with M2/M4 Ultra | Enterprise-grade workloads, model training, research      |
 
 Don't worry if you have a base model Mac—we'll cover optimization techniques and quantization that make AI accessible even on entry-level hardware. At the same time, we'll explore what's possible with high-end Mac Studio and Mac Pro systems that feature dual M-series chips in Ultra configurations with massive unified memory pools.
 
@@ -86,8 +95,8 @@ All code examples will be available in our accompanying GitHub repository, organ
 
 Apple Silicon's unified memory architecture provides unique benefits for AI workloads:
 
-![Unified Memory Architecture](https://via.placeholder.com/800x500?text=Unified+Memory+Architecture)
-*Figure 3: Visualization of data flow in traditional CPU/GPU architecture versus Apple Silicon's unified memory approach, showing how the latter eliminates memory transfer bottlenecks that typically slow down AI workloads.*
+![Unified Memory Architecture](../images/part1/unified-memory-architecture.svg)
+*Figure 4: Visualization of data flow in traditional CPU/GPU architecture versus Apple Silicon's unified memory approach, showing how the latter eliminates memory transfer bottlenecks that typically slow down AI workloads.*
 
 - **Shared Memory**: CPU, GPU, and Neural Engine access the same physical memory
 - **Zero-Copy Operations**: Eliminates costly data transfers between processing units
@@ -103,16 +112,6 @@ Before moving on, you might want to:
 1. Check your Mac model to confirm it has Apple Silicon
 2. Make sure you have at least 10GB of free disk space
 3. Update to the latest macOS version for optimal performance
-
-## Join the Community
-
-Learning AI is more fun together! Join our community discussions at:
-
-- GitHub Discussions: [Link to discussions]
-- Discord: [Link to Discord]
-- Twitter: [@AIwithMac](https://twitter.com)
-
-Share your experiences, ask questions, and connect with others on the same journey.
 
 ## Conclusion
 

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+    <!-- Background -->
+    <rect width="800" height="400" fill="#f8f8f8" />
+
+    <!-- Title -->
+    <text x="400" y="30" font-family="Arial" font-size="20" font-weight="bold" fill="#333"
+        text-anchor="middle">Mac Hardware AI Performance Comparison</text>
+
+    <!-- Chart container -->
+    <rect x="50" y="50" width="700" height="300" fill="white" stroke="#ddd" stroke-width="1" />
+
+    <!-- Y-axis -->
+    <line x1="100" y1="50" x2="100" y2="350" stroke="#aaa" stroke-width="1" />
+    <text x="60" y="200" font-family="Arial" font-size="14" fill="#555" text-anchor="middle"
+        transform="rotate(-90, 60, 200)">AI Performance</text>
+
+    <!-- X-axis -->
+    <line x1="100" y1="350" x2="750" y2="350" stroke="#aaa" stroke-width="1" />
+
+    <!-- Vertical grid lines -->
+    <line x1="100" y1="80" x2="750" y2="80" stroke="#eee" stroke-width="1" />
+    <line x1="100" y1="140" x2="750" y2="140" stroke="#eee" stroke-width="1" />
+    <line x1="100" y1="200" x2="750" y2="200" stroke="#eee" stroke-width="1" />
+    <line x1="100" y1="260" x2="750" y2="260" stroke="#eee" stroke-width="1" />
+    <line x1="100" y1="320" x2="750" y2="320" stroke="#eee" stroke-width="1" />
+
+    <!-- Performance indicators -->
+    <text x="90" y="80" font-family="Arial" font-size="10" fill="#555" text-anchor="end">Highest</text>
+    <text x="90" y="140" font-family="Arial" font-size="10" fill="#555" text-anchor="end">High</text>
+    <text x="90" y="200" font-family="Arial" font-size="10" fill="#555" text-anchor="end">Medium</text>
+    <text x="90" y="260" font-family="Arial" font-size="10" fill="#555" text-anchor="end">Moderate</text>
+    <text x="90" y="320" font-family="Arial" font-size="10" fill="#555" text-anchor="end">Entry</text>
+
+    <!-- Mac Models -->
+
+    <!-- MacBook Air -->
+    <g transform="translate(150, 0)">
+        <rect x="-30" y="290" width="60" height="60" fill="#67B37F" opacity="0.8" />
+        <text x="0" y="370" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">MacBook
+            Air</text>
+        <text x="0" y="385" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">8-16GB
+            RAM</text>
+    </g>
+
+    <!-- MacBook Pro -->
+    <g transform="translate(250, 0)">
+        <rect x="-30" y="230" width="60" height="120" fill="#0071e3" opacity="0.8" />
+        <text x="0" y="370" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">MacBook
+            Pro</text>
+        <text x="0" y="385" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">16-64GB
+            RAM</text>
+    </g>
+
+    <!-- iMac -->
+    <g transform="translate(350, 0)">
+        <rect x="-30" y="200" width="60" height="150" fill="#0071e3" opacity="0.8" />
+        <text x="0" y="370" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">iMac</text>
+        <text x="0" y="385" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">16-64GB
+            RAM</text>
+    </g>
+
+    <!-- Mac mini -->
+    <g transform="translate(450, 0)">
+        <rect x="-30" y="220" width="60" height="130" fill="#0071e3" opacity="0.8" />
+        <text x="0" y="370" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">Mac
+            mini</text>
+        <text x="0" y="385" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">8-32GB
+            RAM</text>
+    </g>
+
+    <!-- Mac Studio -->
+    <g transform="translate(550, 0)">
+        <rect x="-30" y="100" width="60" height="250" fill="#FF675E" opacity="0.8" />
+        <text x="0" y="370" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">Mac
+            Studio</text>
+        <text x="0" y="385" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">32-192GB
+            RAM</text>
+    </g>
+
+    <!-- Mac Pro -->
+    <g transform="translate(650, 0)">
+        <rect x="-30" y="60" width="60" height="290" fill="#FF675E" opacity="0.8" />
+        <text x="0" y="370" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">Mac
+            Pro</text>
+        <text x="0" y="385" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">64-512GB
+            RAM</text>
+    </g>
+
+    <!-- Model size annotations -->
+    <line x1="100" y1="310" x2="750" y2="310" stroke="#777" stroke-width="1" stroke-dasharray="4" />
+    <text x="730" y="325" font-family="Arial" font-size="10" fill="#555" text-anchor="end">Small
+        models (2-7B)</text>
+
+    <line x1="100" y1="240" x2="750" y2="240" stroke="#777" stroke-width="1" stroke-dasharray="4" />
+    <text x="730" y="255" font-family="Arial" font-size="10" fill="#555" text-anchor="end">Medium
+        models (7-13B)</text>
+
+    <line x1="100" y1="170" x2="750" y2="170" stroke="#777" stroke-width="1" stroke-dasharray="4" />
+    <text x="730" y="185" font-family="Arial" font-size="10" fill="#555" text-anchor="end">Large
+        models (13-30B)</text>
+
+    <line x1="100" y1="100" x2="750" y2="100" stroke="#777" stroke-width="1" stroke-dasharray="4" />
+    <text x="730" y="115" font-family="Arial" font-size="10" fill="#555" text-anchor="end">Very
+        large models (70B+)</text>
+</svg>
