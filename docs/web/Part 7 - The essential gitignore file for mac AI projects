@@ -22,7 +22,7 @@ Let's break down our `.gitignore` file section by section:
 
 ### Python-Specific Patterns
 
-```
+```bash
 # Python
 __pycache__/
 *.py[cod]
@@ -50,7 +50,7 @@ This section ignores Python bytecode files, compilation artifacts, and packaging
 
 ### Virtual Environment Directories
 
-```
+```bash
 # Virtual Environment
 ai-env/
 venv/
@@ -62,7 +62,7 @@ Virtual environments contain machine-specific dependencies and binary files. Eac
 
 ### Jupyter Notebook Files
 
-```
+```bash
 # Jupyter Notebook
 .ipynb_checkpoints
 *.ipynb_metadata/
@@ -73,7 +73,7 @@ Jupyter creates checkpoint files that track the state of notebooks. These change
 
 ### macOS System Files
 
-```
+```bash
 # macOS specific
 .DS_Store
 .AppleDouble
@@ -93,7 +93,7 @@ macOS creates various hidden files for tracking metadata. These files have no va
 
 ### Model Files
 
-```
+```bash
 # Model files section
 #
 # WHEN TO USE GIT LFS:
@@ -138,7 +138,7 @@ With Git LFS, large files are represented by pointers in the main repository, wh
 
 ### Data Files
 
-```
+```bash
 # Data files
 data/*.csv
 data/*.json
@@ -156,7 +156,7 @@ Like model files, data can be large and isn't always appropriate to include in v
 
 ### Generated Content
 
-```
+```bash
 # Generated content
 test_plot.png
 uploads/
@@ -174,7 +174,7 @@ Output files like images, plots, and results are typically generated from code t
 
 ### Large and Temporary Files
 
-```
+```bash
 # Large and temporary files
 *.tmp
 *.log
@@ -191,7 +191,7 @@ Temporary files and logs are transient by nature and shouldn't be committed.
 
 ### IDE and Editor Files
 
-```
+```bash
 # IDEs and editors
 .idea/
 .vscode/
@@ -214,7 +214,7 @@ Different team members may use different development environments, each creating
 
 ### Web App and Secrets
 
-```
+```bash
 # Web app related
 flask_session/
 instance/
@@ -236,7 +236,7 @@ Web application caches and especially security credentials should never be commi
 
 Many ML projects include web frontends or JavaScript tooling. Here's how to handle Node.js specific files:
 
-```
+```bash
 # Node.js specific
 logs
 npm-debug.log*
@@ -303,7 +303,7 @@ For ML projects with web components, these patterns are crucial for maintaining 
 
 ### Special Cases
 
-```
+```bash
 # Allow keeping empty directories
 !**/.gitkeep
 ```
@@ -319,6 +319,7 @@ For ML projects, model files present a unique challenge. Here are your options:
 **What it is**: An extension to Git that replaces large files with text pointers in your repository, while storing the actual file content elsewhere.
 
 **Setup**:
+
 ```bash
 # Install Git LFS
 brew install git-lfs
@@ -341,11 +342,13 @@ git push
 ```
 
 **Best for**:
+
 - Projects where model files change frequently
 - Teams that need exact model versions
 - Models under ~2GB (for most hosting providers)
 
 **Limitations**:
+
 - Requires Git LFS support on your hosting platform
 - May incur extra costs for LFS storage/bandwidth
 - Still not ideal for extremely large models (>10GB)
@@ -355,12 +358,14 @@ git push
 **What it is**: A dedicated system for versioning and storing machine learning models, separate from your code repository.
 
 **Examples**:
+
 - MLflow
 - Weights & Biases
 - HuggingFace Model Hub
 - Custom registry (like the one in our repository)
 
 **Best for**:
+
 - Large-scale ML operations
 - Teams with formal ML workflows
 - Models that need metadata beyond what Git can provide
@@ -370,6 +375,7 @@ git push
 **What it is**: Scripts that download models from external sources like HuggingFace, allowing you to keep only the code in your repository.
 
 **Example**:
+
 ```python
 def download_model(model_name, destination):
     """Download a model if it doesn't exist locally."""
@@ -383,6 +389,7 @@ model_path = download_model("google/gemma-2b-it", "models/gemma-2b-it")
 ```
 
 **Best for**:
+
 - Projects using publicly available models
 - Avoiding repository bloat
 - Extremely large models
@@ -392,6 +399,7 @@ model_path = download_model("google/gemma-2b-it", "models/gemma-2b-it")
 **What it is**: Simply add model files to `.gitignore` and distribute them separately (via file sharing, etc.)
 
 **Best for**:
+
 - Quick prototypes
 - Single-developer projects
 - Very large proprietary models
@@ -411,6 +419,7 @@ Many modern ML projects use Python for the ML components and JavaScript/Node.js 
 ### Build Artifacts
 
 Both Python and Node.js generate build artifacts that should be ignored:
+
 - Python: `dist/`, `build/`, `*.egg-info/`
 - Node.js: `dist/`, `build/`, `.next/`, etc.
 
@@ -419,6 +428,7 @@ Make sure your `.gitignore` covers both ecosystems.
 ### Development Environment
 
 For hybrid projects, consider:
+
 1. **Docker**: Containerize your environment to ensure consistency
 2. **Monorepo tools**: Tools like Nx, Turborepo, or Lerna can help manage multi-language repositories
 3. **Documentation**: Clearly document setup steps for both Python and Node.js components
@@ -439,7 +449,7 @@ For hybrid projects, consider:
 
 Here's a complete `.gitignore` file that handles both Python ML projects and Node.js components:
 
-```
+```bash
 # Python
 __pycache__/
 *.py[cod]
