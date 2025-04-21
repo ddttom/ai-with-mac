@@ -1,6 +1,3 @@
-I've merged the Node.js `.gitignore` template with the existing Python ML project `.gitignore` patterns from the document. Here's the comprehensive `.gitignore` file that covers both ecosystems:
-
-```
 # Python
 __pycache__/
 *.py[cod]
@@ -196,21 +193,3 @@ out
 
 # Allow keeping empty directories
 !**/.gitkeep
-```
-
-This combined `.gitignore` file now handles both Python machine learning projects and Node.js applications. It includes specific patterns for:
-
-1. Python-specific files and bytecode
-2. Virtual environments
-3. Jupyter notebook files
-4. macOS system files
-5. ML model files (with configuration options for Git LFS)
-6. Data and dataset files
-7. Generated content and media files
-8. IDE and editor files
-9. Web application files
-10. Secrets and credentials
-11. Node.js specific patterns including npm/yarn related files
-12. JavaScript tooling artifacts
-
-The file maintains the helpful comments from the original AI with Mac `.gitignore` file, particularly around model files management and Git LFS usage, which is especially important for ML projects.
