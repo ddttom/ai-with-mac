@@ -52,6 +52,73 @@ Our exploration demonstrates the need for more sophisticated methods of evaluati
 
 In conclusion, while confidence scores offer a starting point for evaluating LLM outputs, they are far from the complete picture. By moving beyond surface-level metrics and focusing on the confidence associated with the core meaning—filtering out both stop words and punctuation—we can develop a more discerning and ultimately more trustworthy relationship with these powerful AI tools. The key lies in understanding *what* the AI is confident about, not just *how* confident it sounds.
 
+Now the run
+
+```terminal
+python scripts/confidence.py
+OpenAI version: 1.30.1
+Client created successfully
+Question: Explain why water boils at a lower temperature when heated more intensely at the same altitude?
+
+Answer: When water is heated more intensely, it absorbs more energy, which increases the kinetic energy of the water molecules. This causes the water molecules to move faster and eventually reach a point where they have enough energy to overcome the intermolecular forces holding them together in the liquid state. This is when the water starts to boil and turn into vapor.
+
+At higher altitudes, the atmospheric pressure is lower compared to sea level. This lower pressure means there are fewer air molecules pressing down on the surface of the water. As a result, it requires less energy for the water molecules to overcome the reduced pressure and transition into the vapor phase. This is why water boils at a lower temperature at higher altitudes.
+
+In summary, when water is heated more intensely, it
+
+Potentially Less Confident Key Concepts (Confidence < 0.60):
+
+Token: 'absorbs' (Confidence: 0.5003)
+  Alternatives: 'means': 0.0988, 'reaches': 0.0983, 'gains': 0.0921
+------------------------------
+Token: 'more' (Confidence: 0.4959)
+  Alternatives: 'heat': 0.2626, 'energy': 0.2117, 'thermal': 0.0191
+------------------------------
+Token: 'energy' (Confidence: 0.4422)
+  Alternatives: 'heat': 0.3087, 'thermal': 0.2488, 'kinetic': 0.0002
+------------------------------
+Token: 'kinetic' (Confidence: 0.4611)
+  Alternatives: 'average': 0.3528, 'temperature': 0.0832, 'speed': 0.0377
+------------------------------
+Token: 'eventually' (Confidence: 0.2143)
+  Alternatives: 'collide': 0.1350, 'break': 0.1136
+------------------------------
+Token: 'reach' (Confidence: 0.5073)
+  Alternatives: 'break': 0.3879, 'overcome': 0.0578, 'escape': 0.0381
+------------------------------
+Token: 'starts' (Confidence: 0.4914)
+  Alternatives: 'transitions': 0.2474, 'begins': 0.0972, 'boils': 0.0726
+------------------------------
+Token: 'turn' (Confidence: 0.4842)
+  Alternatives: 'turns': 0.3325, 'transition': 0.0683, 'transitions': 0.0407
+------------------------------
+Token: 'higher' (Confidence: 0.4857)
+  Alternatives: 'normal': 0.0021
+------------------------------
+Token: 'lower' (Confidence: 0.5148)
+  Alternatives: 'reduced': 0.1720, 'means': 0.1479, 'decrease': 0.1279
+------------------------------
+Token: 'pressing' (Confidence: 0.5219)
+  Alternatives: 'pushing': 0.3624, 'above': 0.1040, 'exert': 0.0107
+------------------------------
+Token: 'requires' (Confidence: 0.5891)
+  Alternatives: 'becomes': 0.0299, 'takes': 0.0296
+------------------------------
+Token: 'overcome' (Confidence: 0.4385)
+  Alternatives: 'escape': 0.2844, 'break': 0.2622, 'reach': 0.0139
+------------------------------
+Token: 'transition' (Confidence: 0.4824)
+  Alternatives: 'reach': 0.1937, 'turn': 0.0987, 'start': 0.0692
+------------------------------
+
+Confidence Level (based on potentially less confident key concepts): Low
+
+Final Answer (Stop words removed): water heated more intensely, absorbs more energy, increases kinetic energy water molecules. causes water molecules move faster eventually reach point enough energy overcome intermolecular forces holding them together liquid state. water starts boil turn vapor. higher altitudes, atmospheric pressure lower compared sea level. lower pressure means fewer air molecules pressing surface water. result, requires less energy water molecules overcome reduced pressure transition vapor phase. water boils lower temperature higher altitudes. summary, water heated more intensely,
+ 
+```
+
+Then the code
+
 ```python
 import openai
 import math
@@ -194,70 +261,4 @@ print(f"\nFinal Answer: {answer}")
 # Generate final answer with stop words removed
 answer_without_stopwords = " ".join([word for word in answer.lower().split() if word not in stop_words])
 print(f"\nFinal Answer (Stop words removed): {answer_without_stopwords}")
-
-```
-
-Now the run
-
-```terminal
-python scripts/confidence.py
-OpenAI version: 1.30.1
-Client created successfully
-Question: Explain why water boils at a lower temperature when heated more intensely at the same altitude?
-
-Answer: When water is heated more intensely, it absorbs more energy, which increases the kinetic energy of the water molecules. This causes the water molecules to move faster and eventually reach a point where they have enough energy to overcome the intermolecular forces holding them together in the liquid state. This is when the water starts to boil and turn into vapor.
-
-At higher altitudes, the atmospheric pressure is lower compared to sea level. This lower pressure means there are fewer air molecules pressing down on the surface of the water. As a result, it requires less energy for the water molecules to overcome the reduced pressure and transition into the vapor phase. This is why water boils at a lower temperature at higher altitudes.
-
-In summary, when water is heated more intensely, it
-
-Potentially Less Confident Key Concepts (Confidence < 0.60):
-
-Token: 'absorbs' (Confidence: 0.5003)
-  Alternatives: 'means': 0.0988, 'reaches': 0.0983, 'gains': 0.0921
-------------------------------
-Token: 'more' (Confidence: 0.4959)
-  Alternatives: 'heat': 0.2626, 'energy': 0.2117, 'thermal': 0.0191
-------------------------------
-Token: 'energy' (Confidence: 0.4422)
-  Alternatives: 'heat': 0.3087, 'thermal': 0.2488, 'kinetic': 0.0002
-------------------------------
-Token: 'kinetic' (Confidence: 0.4611)
-  Alternatives: 'average': 0.3528, 'temperature': 0.0832, 'speed': 0.0377
-------------------------------
-Token: 'eventually' (Confidence: 0.2143)
-  Alternatives: 'collide': 0.1350, 'break': 0.1136
-------------------------------
-Token: 'reach' (Confidence: 0.5073)
-  Alternatives: 'break': 0.3879, 'overcome': 0.0578, 'escape': 0.0381
-------------------------------
-Token: 'starts' (Confidence: 0.4914)
-  Alternatives: 'transitions': 0.2474, 'begins': 0.0972, 'boils': 0.0726
-------------------------------
-Token: 'turn' (Confidence: 0.4842)
-  Alternatives: 'turns': 0.3325, 'transition': 0.0683, 'transitions': 0.0407
-------------------------------
-Token: 'higher' (Confidence: 0.4857)
-  Alternatives: 'normal': 0.0021
-------------------------------
-Token: 'lower' (Confidence: 0.5148)
-  Alternatives: 'reduced': 0.1720, 'means': 0.1479, 'decrease': 0.1279
-------------------------------
-Token: 'pressing' (Confidence: 0.5219)
-  Alternatives: 'pushing': 0.3624, 'above': 0.1040, 'exert': 0.0107
-------------------------------
-Token: 'requires' (Confidence: 0.5891)
-  Alternatives: 'becomes': 0.0299, 'takes': 0.0296
-------------------------------
-Token: 'overcome' (Confidence: 0.4385)
-  Alternatives: 'escape': 0.2844, 'break': 0.2622, 'reach': 0.0139
-------------------------------
-Token: 'transition' (Confidence: 0.4824)
-  Alternatives: 'reach': 0.1937, 'turn': 0.0987, 'start': 0.0692
-------------------------------
-
-Confidence Level (based on potentially less confident key concepts): Low
-
-Final Answer (Stop words removed): water heated more intensely, absorbs more energy, increases kinetic energy water molecules. causes water molecules move faster eventually reach point enough energy overcome intermolecular forces holding them together liquid state. water starts boil turn vapor. higher altitudes, atmospheric pressure lower compared sea level. lower pressure means fewer air molecules pressing surface water. result, requires less energy water molecules overcome reduced pressure transition vapor phase. water boils lower temperature higher altitudes. summary, water heated more intensely,
- 
 ```
