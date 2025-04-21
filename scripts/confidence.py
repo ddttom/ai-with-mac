@@ -38,7 +38,7 @@ stop_words = {
     "of", "the", "and", "a", "is", "in", "it", "to", ",", ".", "at", "when",
     "as", "for", "with", "on", "be", "that", "by", "this", "have", "do",
     "so", "than", "then", "however", "but", "can", "from", "into", "will",
-    "are", "was", "were", "been", "being", "had", "has", "could", "would",
+    "was", "were", "been", "being", "had", "has", "could", "would",
     "should", "may", "might", "must", "am", "are", "shall", "ought", "did",
     "does", "having", "here", "there", "where", "which", "who", "whom",
     "whose", "what", "why", "how", "all", "any", "both", "each", "few",
@@ -46,6 +46,10 @@ stop_words = {
     "first", "second", "third", "up", "down", "out", "off", "over", "under",
     "again", "further", "thence", "once", "its", "they"
 }
+punctuation = {".", "!", "?", ",",":","-","_","(",")","[","]","{","}","'","\"","*","+","=","/","\\","|","@","#","$","%","^","&","~","`","<",">"}
+
+# Combine stop words and punctuation into a single set
+filtered_words = stop_words.union(punctuation)
 
 # Confidence threshold
 low_confidence_threshold = 0.6
@@ -83,13 +87,13 @@ try:
             token = token_info.token.strip().lower()
             token_prob = math.exp(token_info.logprob)
 
-            if token and token not in stop_words and token_prob < low_confidence_threshold:
+            if token and token not in filtered_words and token_prob < low_confidence_threshold:
                 count_low_confidence += 1
                 total_prob_low_confidence += token_prob
                 alternatives = {
                     t.token.strip(): math.exp(t.logprob)
                     for t in token_info.top_logprobs
-                    if t.token.strip().lower() != token and t.token.strip().lower() not in stop_words
+                    if t.token.strip().lower() != token and t.token.strip().lower() not in filtered_words
                 }
                 sorted_alternatives = sorted(alternatives.items(), key=lambda x: x[1], reverse=True)[:top_n_alternatives]
 
@@ -132,3 +136,7 @@ except Exception as e:
     print(f"Error type: {type(e)}")
 
 print(f"\nFinal Answer: {answer}")
+
+# Generate final answer with stop words removed
+answer_without_stopwords = " ".join([word for word in answer.lower().split() if word not in stop_words])
+print(f"\nFinal Answer (Stop words removed): {answer_without_stopwords}")
